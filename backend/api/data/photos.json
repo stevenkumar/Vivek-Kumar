@@ -1,0 +1,50 @@
+[
+  {
+    "_id": "photo-1",
+    "filename": "Viv.png",
+    "originalName": "Hero Portrait",
+    "url": "/home/Viv.png",
+    "category": "hero",
+    "caption": "Vivek Kumar Portrait"
+  },
+  {
+    "_id": "photo-2",
+    "filename": "Vivekimg.jpg",
+    "originalName": "Profile Picture",
+    "url": "/home/Vivekimg.jpg",
+    "category": "profile",
+    "caption": "Vivek Kumar Profile"
+  },
+  {
+    "_id": "photo-3",
+    "filename": "mumbai-local.jpg",
+    "originalName": "Mumbai Life",
+    "url": "https://images.unsplash.com/photo-1570168007204-dfb528c6958f?w=1000&auto=format&fit=crop&q=80",
+    "category": "photo",
+    "caption": "Mumbai Reflections"
+  },
+  {
+    "_id": "photo-4",
+    "filename": "workspace-setup.jpg",
+    "originalName": "Creative Space",
+    "url": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1000&auto=format&fit=crop&q=80",
+    "category": "photo",
+    "caption": "Development Workspace"
+  },
+  {
+    "_id": "photo-5",
+    "filename": "city-lights.jpg",
+    "originalName": "Urban Atmosphere",
+    "url": "https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=1000&auto=format&fit=crop&q=80",
+    "category": "photo",
+    "caption": "City Nightscape"
+  },
+  {
+    "_id": "photo-6",
+    "filename": "code-screen.jpg",
+    "originalName": "Coding in Flow",
+    "url": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1000&auto=format&fit=crop&q=80",
+    "category": "photo",
+    "caption": "Clean Code Architecture"
+  }
+]

@@ -1,0 +1,175 @@
+@import "tailwindcss";
+
+:root {
+  /* Brand / Accents */
+  --color-primary: #323334;
+  --color-primary-rgb: 6, 182, 212;
+  --color-secondary: #737882;
+  --color-secondary-rgb: 59, 130, 246;
+  --color-accent: #7f8288;
+  --color-accent-rgb: 139, 92, 246;
+
+  /* Surfaces */
+  --color-bg: #050505;
+  --color-card: #09090c;
+  --color-card-hover: #121217;
+
+  /* Typography */
+  --color-text: #ffffff;
+  /* --color-text-muted: #a1a1aa; */
+  --color-text-muted: #b3aeae;
+
+  /* Borders */
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-hover: rgba(6, 182, 212, 0.35);
+
+  /* Semantics */
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
+
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: dark;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+}
+
+@theme {
+  --color-primary: var(--color-primary);
+  --color-secondary: var(--color-secondary);
+  --color-accent: var(--color-accent);
+  --color-bg: var(--color-bg);
+  --color-card: var(--color-card);
+  --color-text: var(--color-text);
+  --color-text-muted: var(--color-text-muted);
+  --color-border: var(--color-border);
+}
+
+/* Animations */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-ping {
+  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* Custom scrollbars */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   GLOBAL SEMANTIC THEME UTILITIES (Driven by CSS Custom Properties)
+══════════════════════════════════════════════════════════════════════════════ */
+
+/* Backgrounds */
+.bg-theme-canvas {
+  background-color: var(--color-bg) !important;
+}
+
+.bg-theme-card {
+  background-color: var(--color-card) !important;
+}
+
+.bg-theme-card-hover:hover {
+  background-color: var(--color-card-hover) !important;
+}
+
+.bg-theme-primary {
+  background-color: var(--color-primary) !important;
+}
+
+.bg-theme-secondary {
+  background-color: var(--color-secondary) !important;
+}
+
+/* Typography */
+.text-theme-base {
+  color: var(--color-text) !important;
+}
+
+.text-theme-muted {
+  color: var(--color-text-muted) !important;
+}
+
+.text-theme-primary {
+  color: var(--color-primary) !important;
+}
+
+.text-theme-secondary {
+  color: var(--color-secondary) !important;
+}
+
+/* Borders */
+.border-theme {
+  border-color: var(--color-border) !important;
+}
+
+.border-theme-hover:hover {
+  border-color: var(--color-border-hover) !important;
+}
+
+.border-theme-primary {
+  border-color: var(--color-primary) !important;
+}
+
+/* Gradients & Glows */
+.gradient-primary {
+  background: linear-gradient(135deg, var(--color-secondary), var(--color-primary)) !important;
+}
+
+.gradient-primary-text {
+  background: linear-gradient(135deg, #ffffff, var(--color-text-muted));
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.glow-primary {
+  box-shadow: 0 0 25px rgba(var(--color-primary-rgb), 0.25) !important;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  overflow-x: hidden;
+}
+
+.text-outline {
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.4);
+  color: transparent;
+}

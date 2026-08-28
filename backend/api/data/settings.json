@@ -1,0 +1,38 @@
+{
+  "profile": {
+    "name": "Vivek Kumar",
+    "role": "Webdesigner & Programmer",
+    "tagline": "👋, my name is Vivek Kumar and I am a freelance",
+    "location": "Mumbai, India",
+    "email": "vkvseri@gmail.com",
+    "bio": "Hi, I'm Vivek Kumar — a Frontend Developer at Tekunik who's passionate about building web experiences that don't just work, but feel right. I focus on creating fast, clean, and visually engaging interfaces using modern tools like React, Next.js, and Tailwind CSS.\n\nFor me, frontend development isn't just about writing code — it's about shaping how people interact with a product. That's why I pay close attention to performance, responsiveness, and the small details that make a big difference.",
+    "story": "I like to think my story starts like a slow, warm movie scene — sunlight over open fields in Ballia, Uttar Pradesh. Life there wasn't rushed. It had its own rhythm.\n\nIn 9th grade, I moved to Mumbai. It felt like stepping into a completely different world. The quiet fields were replaced by crowded streets, fast-moving people, and the constant rush of local trains.\n\nToday, I describe myself as a 'village soul with a high-speed city processor.' I stay patient when solving problems, but adapt quickly when things get complex.",
+    "openToWork": true,
+    "experienceYears": "1",
+    "completedProjects": "2",
+    "happyClients": "..."
+  },
+  "socials": {
+    "github": "https://github.com/stevenkumar",
+    "linkedin": "https://www.linkedin.com/in/vivek-kumar-733552317/",
+    "twitter": "https://x.com/Vivek9653",
+    "email": "vkvseri@gmail.com",
+    "resumeUrl": "./home/Vivek_ Resume_2026.pdf"
+  },
+  "theme": {
+    "primaryColor": "#323334",
+    "secondaryColor": "#95a8c6",
+    "accentColor": "#8375a3",
+    "bgColor": "#050505",
+    "cardBgColor": "#09090c",
+    "cardHoverBgColor": "#121217",
+    "textColor": "#ffffff",
+    "mutedTextColor": "#a1a1be",
+    "borderColor": "rgba(255, 255, 255, 0.08)",
+    "borderHoverColor": "rgba(6, 182, 212, 0.35)",
+    "successColor": "#10b981",
+    "warningColor": "#f59e0b",
+    "errorColor": "#ef4444",
+    "infoColor": "#3b82f6"
+  }
+}

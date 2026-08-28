@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="./home/Vivekimg.jpg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vivek Kumar</title>
+    <!-- Zero-Flicker Theme Pre-Hydration -->
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('portfolio_settings');
+          if (saved) {
+            var parsed = JSON.parse(saved);
+            if (parsed && parsed.theme) {
+              var t = parsed.theme;
+              var root = document.documentElement;
+              function hexToRgb(hex, fallback) {
+                if (!hex) return fallback;
+                var c = hex.replace('#', '');
+                if (c.length === 3) c = c.split('').map(function(x) { return x + x; }).join('');
+                var num = parseInt(c, 16);
+                if (isNaN(num)) return fallback;
+                return ((num >> 16) & 255) + ', ' + ((num >> 8) & 255) + ', ' + (num & 255);
+              }
+              if (t.primaryColor) {
+                root.style.setProperty('--color-primary', t.primaryColor);
+                root.style.setProperty('--color-primary-rgb', hexToRgb(t.primaryColor, '6, 182, 212'));
+              }
+              if (t.secondaryColor) {
+                root.style.setProperty('--color-secondary', t.secondaryColor);
+                root.style.setProperty('--color-secondary-rgb', hexToRgb(t.secondaryColor, '59, 130, 246'));
+              }
+              if (t.accentColor) root.style.setProperty('--color-accent', t.accentColor);
+              if (t.bgColor) root.style.setProperty('--color-bg', t.bgColor);
+              if (t.cardBgColor) root.style.setProperty('--color-card', t.cardBgColor);
+              if (t.textColor) root.style.setProperty('--color-text', t.textColor);
+              if (t.mutedTextColor) root.style.setProperty('--color-text-muted', t.mutedTextColor);
+            }
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
