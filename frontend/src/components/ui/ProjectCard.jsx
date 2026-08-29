@@ -42,9 +42,9 @@ const ProjectCard = ({ project, index = 0 }) => {
               <div
                 className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] sm:text-[11px] font-bold uppercase tracking-widest border"
                 style={{
-                  backgroundColor: 'rgba(var(--color-primary-rgb, 6, 182, 212), 0.12)',
-                  borderColor: 'rgba(var(--color-primary-rgb, 6, 182, 212), 0.3)',
-                  color: 'var(--color-primary, #06b6d4)',
+                  backgroundColor: 'rgba(var(--color-primary-rgb, 137, 153, 179), 0.12)',
+                  borderColor: 'rgba(var(--color-primary-rgb, 137, 153, 179), 0.3)',
+                  color: 'var(--color-primary, #8999b3)',
                 }}
               >
                 {category}
@@ -77,7 +77,7 @@ const ProjectCard = ({ project, index = 0 }) => {
                 >
                   <span
                     className="h-1.5 w-1.5 rounded-full shrink-0"
-                    style={{ backgroundColor: 'var(--color-primary, #06b6d4)' }}
+                    style={{ backgroundColor: 'var(--color-primary, #8999b3)' }}
                   />
                   {tag}
                 </span>
@@ -124,7 +124,7 @@ const ProjectCard = ({ project, index = 0 }) => {
             className="absolute inset-0 rounded-full animate-pulse pointer-events-none"
             style={{
               background:
-                'radial-gradient(circle at center, rgba(var(--color-primary-rgb, 6, 182, 212), 0.15) 0%, transparent 70%)',
+                'radial-gradient(circle at center, rgba(var(--color-primary-rgb, 137, 153, 179), 0.15) 0%, transparent 70%)',
             }}
           />
 

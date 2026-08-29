@@ -9,10 +9,10 @@ import {
 
 const router = express.Router()
 
-// Public
+// Public — list projects
 router.get('/', getProjects)
 
-// Admin
+// Admin — CRUD
 router.post('/admin/fetch-preview', fetchPreviewImage)
 router.post('/admin', createProject)
 router.put('/admin/:id', updateProject)

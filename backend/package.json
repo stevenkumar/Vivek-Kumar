@@ -3,6 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "description": "File-based JSON backend for the Vivek Kumar portfolio (no database).",
   "scripts": {
     "start": "node api/index.js",
     "dev": "node --watch api/index.js"

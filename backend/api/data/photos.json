@@ -1,50 +1,74 @@
 [
   {
+    "id": 1,
     "_id": "photo-1",
     "filename": "Viv.png",
-    "originalName": "Hero Portrait",
+    "title": "Hero Portrait",
+    "description": "Vivek Kumar Portrait",
     "url": "/home/Viv.png",
-    "category": "hero",
-    "caption": "Vivek Kumar Portrait"
+    "category": "hero"
   },
   {
+    "id": 2,
     "_id": "photo-2",
     "filename": "Vivekimg.jpg",
-    "originalName": "Profile Picture",
+    "title": "Profile Picture",
+    "description": "Vivek Kumar Profile",
     "url": "/home/Vivekimg.jpg",
-    "category": "profile",
-    "caption": "Vivek Kumar Profile"
+    "category": "profile"
   },
   {
+    "id": 3,
     "_id": "photo-3",
-    "filename": "mumbai-local.jpg",
-    "originalName": "Mumbai Life",
-    "url": "https://images.unsplash.com/photo-1570168007204-dfb528c6958f?w=1000&auto=format&fit=crop&q=80",
-    "category": "photo",
-    "caption": "Mumbai Reflections"
+    "filename": "Vsvg.svg",
+    "title": "V Signature",
+    "description": "Vivek Kumar Signature Graphic",
+    "url": "/Vsvg.svg",
+    "category": "svg"
   },
   {
+    "id": 4,
     "_id": "photo-4",
-    "filename": "workspace-setup.jpg",
-    "originalName": "Creative Space",
-    "url": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1000&auto=format&fit=crop&q=80",
-    "category": "photo",
-    "caption": "Development Workspace"
+    "filename": "mumbai-local.jpg",
+    "title": "Mumbai Reflections",
+    "description": "The rhythm of Mumbai's local trains and city life.",
+    "url": "https://images.unsplash.com/photo-1570168007204-dfb528c6958f?w=1000&auto=format&fit=crop&q=80",
+    "category": "photo"
   },
   {
+    "id": 5,
     "_id": "photo-5",
-    "filename": "city-lights.jpg",
-    "originalName": "Urban Atmosphere",
-    "url": "https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=1000&auto=format&fit=crop&q=80",
-    "category": "photo",
-    "caption": "City Nightscape"
+    "filename": "workspace-setup.jpg",
+    "title": "Creative Space",
+    "description": "Development workspace with clean, focused energy.",
+    "url": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1000&auto=format&fit=crop&q=80",
+    "category": "photo"
   },
   {
+    "id": 6,
     "_id": "photo-6",
+    "filename": "city-lights.jpg",
+    "title": "Urban Atmosphere",
+    "description": "City nightscape under neon lights.",
+    "url": "https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=1000&auto=format&fit=crop&q=80",
+    "category": "photo"
+  },
+  {
+    "id": 7,
+    "_id": "photo-7",
     "filename": "code-screen.jpg",
-    "originalName": "Coding in Flow",
+    "title": "Coding in Flow",
+    "description": "Clean, focused code architecture.",
     "url": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1000&auto=format&fit=crop&q=80",
-    "category": "photo",
-    "caption": "Clean Code Architecture"
+    "category": "photo"
+  },
+  {
+    "id": 8,
+    "_id": "photo-8",
+    "filename": "golden-hour.jpg",
+    "title": "Golden Hour",
+    "description": "Warm light on the horizon.",
+    "url": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1000&auto=format&fit=crop&q=80",
+    "category": "photo"
   }
 ]

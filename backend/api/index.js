@@ -3,8 +3,10 @@ import cors from 'cors'
 import helmet from 'helmet'
 import rateLimit from 'express-rate-limit'
 import dotenv from 'dotenv'
-import { fileURLToPath } from 'url'
+import fs from 'fs'
 import path from 'path'
+import { fileURLToPath } from 'url'
+import { DATA_DIR, UPLOADS_DIR } from './store.js'
 import projectRoutes from './routes/projectRoutes.js'
 import contactRoutes from './routes/contactRoutes.js'
 import mediaRoutes from './routes/mediaRoutes.js'
@@ -29,14 +31,13 @@ process.on('uncaughtException', (err) => {
 const app = express()
 const clientOrigin = process.env.CLIENT_URL || 'http://localhost:5173'
 
-// Trust proxy for Vercel / reverse proxy rate limiting
+// Trust proxy for reverse proxies / rate limiting
 app.set('trust proxy', 1)
 
 // ─── REQUEST LOGGER MIDDLEWARE ──────────────────────────────────────────────
 app.use((req, res, next) => {
   const start = Date.now()
   const { method, url } = req
-
   console.log(`[${new Date().toISOString()}] 🛫 ${method} ${url} - Starting request`)
 
   res.on('finish', () => {
@@ -58,8 +59,11 @@ app.use(
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin or local/client origin
-      if (!origin || origin === clientOrigin || origin.startsWith('http://localhost')) {
+      if (
+        !origin ||
+        origin === clientOrigin ||
+        origin.startsWith('http://localhost')
+      ) {
         callback(null, true)
       } else {
         callback(null, true)
@@ -92,18 +96,44 @@ app.get('/api/health', (req, res) => {
     status: 'ok',
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV || 'development',
+    storage: 'file-based-json',
     service: 'Vivek Kumar Portfolio API',
   })
 })
 
-// ─── STATIC UPLOADS SERVING ──────────────────────────────────────────────────
-app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')))
+// ─── STATIC UPLOADS SERVING (resume files) ───────────────────────────────────
+app.use(
+  '/uploads',
+  express.static(UPLOADS_DIR, {
+    fallthrough: true,
+    setHeaders: (res) => {
+      res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin')
+    },
+  })
+)
 
 // ─── API ROUTES ──────────────────────────────────────────────────────────────
 app.use('/api/settings', settingsRoutes)
 app.use('/api/projects', projectRoutes)
 app.use('/api/contact', contactRoutes)
 app.use('/api/media', mediaRoutes)
+
+// ─── STATIC FRONTEND (production only) ───────────────────────────────────────
+// Serves the built Vite app (root dist/) from the same service so a single
+// Render Web Service hosts both frontend and API. Falls back to index.html
+// for SPA client-side routing. In dev, Vite serves and proxies /api instead.
+const DIST_DIR = path.resolve(__dirname, '..', '..', 'dist')
+const indexHtml = path.join(DIST_DIR, 'index.html')
+if (process.env.NODE_ENV === 'production' && fs.existsSync(indexHtml)) {
+  app.use(express.static(DIST_DIR))
+  app.get(/^\/(?!api\/|uploads\/).*/, (req, res, next) => {
+    const requested = path.join(DIST_DIR, req.path)
+    if (fs.existsSync(requested) && fs.statSync(requested).isFile()) {
+      return next()
+    }
+    res.sendFile(indexHtml)
+  })
+}
 
 // ─── 404 HANDLER ─────────────────────────────────────────────────────────────
 app.use((req, res) => {
@@ -117,12 +147,15 @@ app.use((req, res) => {
 // ─── ERROR HANDLER ───────────────────────────────────────────────────────────
 app.use(errorHandler)
 
-// ─── LOCAL DEVELOPMENT SERVER ────────────────────────────────────────────────
-if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+// ─── LOCAL / RENDER STANDALONE SERVER ────────────────────────────────────────
+// Listens on its own port for local dev and Render Web Service.
+// Skipped on Vercel, where the serverless handler invokes the exported app.
+if (!process.env.VERCEL) {
   const PORT = process.env.PORT || 5000
   const server = app.listen(PORT, () => {
     console.log(`✅ Backend server running on http://localhost:${PORT}`)
     console.log(`🌐 Frontend configured for: ${clientOrigin}`)
+    console.log(`📁 Data directory: ${DATA_DIR}`)
     console.log(`🔍 Health check: http://localhost:${PORT}/api/health`)
   })
 

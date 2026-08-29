@@ -91,7 +91,7 @@ export const DashboardSection = ({
         />
         <StatWidget
           title="Theme Palette"
-          value={theme?.primaryColor || '#06b6d4'}
+          value={theme?.primaryColor || '#8999b3'}
           subtitle="Active Root Accent"
           icon={Palette}
           onClick={() => onNavigateTab('theme')}

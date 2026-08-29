@@ -29,9 +29,9 @@ export const AdminHeader = ({ activeTab, onOpenMobile, onExit, onRefreshAll, isR
       <div className="flex items-center gap-3">
         {/* Active Theme Chip */}
         <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-theme-card border border-theme text-xs font-mono">
-          <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: theme?.primaryColor || '#06b6d4' }} />
+          <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: theme?.primaryColor || '#8999b3' }} />
           <span className="text-theme-muted">Theme:</span>
-          <span className="text-theme-primary font-bold">{theme?.primaryColor || '#06b6d4'}</span>
+          <span className="text-theme-primary font-bold">{theme?.primaryColor || '#8999b3'}</span>
         </div>
 
         {/* Live Server Indicator */}

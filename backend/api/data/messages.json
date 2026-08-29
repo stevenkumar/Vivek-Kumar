@@ -1,22 +1,12 @@
 [
   {
-    "id": 1,
-    "_id": "msg-sample-1",
-    "name": "Sarah Jenkins",
-    "email": "sarah.j@techstartup.io",
-    "number": "9876543210",
-    "message": "Hi Vivek, we love your portfolio and interactive orbital radar! We are looking for a Senior Frontend Engineer for our Next.js dashboard project. Are you available for a discussion this week?",
-    "createdAt": "2026-08-27T10:30:00.000Z",
-    "isRead": false
-  },
-  {
-    "id": 2,
-    "_id": "msg-sample-2",
-    "name": "Alex Mercer",
-    "email": "alex.mercer@designstudio.com",
-    "number": "9123456780",
-    "message": "Hello Vivek, I came across your work on GitHub. We need help redesigning our e-commerce platform with Framer Motion micro-animations. Would love to collaborate!",
-    "createdAt": "2026-08-26T14:15:00.000Z",
+    "id": 1787922611447,
+    "_id": "msg-1787922611448",
+    "name": "V Kumar",
+    "email": "vkvseri@gmail.com",
+    "number": "",
+    "message": "hello",
+    "createdAt": "2026-08-28T13:10:11.448Z",
     "isRead": true
   }
 ]

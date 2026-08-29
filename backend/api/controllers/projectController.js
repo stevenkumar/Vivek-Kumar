@@ -1,25 +1,9 @@
-import fs from 'fs'
-import path from 'path'
-import { fileURLToPath } from 'url'
+import { readJson, writeJson } from '../store.js'
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const PROJECTS_PATH = path.join(__dirname, '..', 'data', 'projects.json')
+const PROJECTS_FILE = 'projects.json'
 
-const readProjects = () => {
-  try {
-    if (fs.existsSync(PROJECTS_PATH)) {
-      const rawData = fs.readFileSync(PROJECTS_PATH, 'utf8')
-      return JSON.parse(rawData)
-    }
-  } catch (err) {
-    console.error('Error reading projects.json:', err)
-  }
-  return []
-}
-
-const writeProjects = (projects) => {
-  fs.writeFileSync(PROJECTS_PATH, JSON.stringify(projects, null, 2), 'utf8')
-}
+const readProjects = () => readJson(PROJECTS_FILE, [])
+const writeProjects = (projects) => writeJson(PROJECTS_FILE, projects)
 
 /**
  * Extracts preview thumbnail image from a web URL using OpenGraph metadata
@@ -45,7 +29,6 @@ export const extractPreviewImage = async (targetUrl) => {
 
     const html = await response.text()
 
-    // 1. Match OpenGraph image: <meta property="og:image" content="...">
     const ogMatch =
       html.match(/<meta\s+[^>]*property=["']og:image["'][^>]*content=["']([^"']+)["']/i) ||
       html.match(/<meta\s+[^>]*content=["']([^"']+)["'][^>]*property=["']og:image["']/i)
@@ -53,7 +36,6 @@ export const extractPreviewImage = async (targetUrl) => {
       return resolveUrl(ogMatch[1], cleanUrl)
     }
 
-    // 2. Match Twitter image: <meta name="twitter:image" content="...">
     const twMatch =
       html.match(/<meta\s+[^>]*name=["']twitter:image["'][^>]*content=["']([^"']+)["']/i) ||
       html.match(/<meta\s+[^>]*content=["']([^"']+)["'][^>]*name=["']twitter:image["']/i)
@@ -61,7 +43,6 @@ export const extractPreviewImage = async (targetUrl) => {
       return resolveUrl(twMatch[1], cleanUrl)
     }
 
-    // 3. Match image_src link: <link rel="image_src" href="...">
     const linkMatch = html.match(/<link\s+[^>]*rel=["']image_src["'][^>]*href=["']([^"']+)["']/i)
     if (linkMatch && linkMatch[1]) {
       return resolveUrl(linkMatch[1], cleanUrl)
@@ -70,7 +51,6 @@ export const extractPreviewImage = async (targetUrl) => {
     console.warn(`Preview metadata extraction skipped for ${cleanUrl}: ${err.message}`)
   }
 
-  // 4. Reliable screenshot fallback via microlink
   return `https://api.microlink.io/?url=${encodeURIComponent(cleanUrl)}&screenshot=true&embed=screenshot.url`
 }
 
@@ -85,7 +65,7 @@ const resolveUrl = (relativeOrAbsolute, base) => {
 /**
  * GET /api/projects - List all projects
  */
-export const getProjects = async (req, res, next) => {
+export const getProjects = (req, res, next) => {
   try {
     const projects = readProjects()
     res.json({ success: true, data: projects })
@@ -95,7 +75,7 @@ export const getProjects = async (req, res, next) => {
 }
 
 /**
- * POST /api/admin/projects/fetch-preview - Fetch image preview for any URL
+ * POST /api/projects/admin/fetch-preview - Fetch image preview for any URL
  */
 export const fetchPreviewImage = async (req, res, next) => {
   try {
@@ -115,11 +95,11 @@ export const fetchPreviewImage = async (req, res, next) => {
 }
 
 /**
- * POST /api/admin/projects - Create new project
+ * POST /api/projects/admin - Create new project
  */
 export const createProject = async (req, res, next) => {
   try {
-    const { title, description, link, liveLink, repoLink, tags, category, imageUrl } = req.body
+    const { title, description, link, liveLink, repoLink, tags, category, imageUrl, featured } = req.body
 
     if (!title || !description || (!link && !liveLink)) {
       return res.status(400).json({
@@ -131,7 +111,6 @@ export const createProject = async (req, res, next) => {
     const finalLink = link || liveLink
     let finalImageUrl = imageUrl
 
-    // Auto fetch thumbnail if not provided
     if (!finalImageUrl) {
       finalImageUrl = await extractPreviewImage(finalLink)
     }
@@ -147,6 +126,7 @@ export const createProject = async (req, res, next) => {
       imageUrl: finalImageUrl,
       tags: Array.isArray(tags) ? tags : [],
       category: category ? category.trim() : 'Web App',
+      featured: Boolean(featured),
       createdAt: new Date().toISOString(),
     }
 
@@ -161,7 +141,7 @@ export const createProject = async (req, res, next) => {
 }
 
 /**
- * PUT /api/admin/projects/:id - Update existing project
+ * PUT /api/projects/admin/:id - Update existing project
  */
 export const updateProject = async (req, res, next) => {
   try {
@@ -177,7 +157,6 @@ export const updateProject = async (req, res, next) => {
     const updatedLink = req.body.link || req.body.liveLink || current.link || current.liveLink
     let updatedImageUrl = req.body.imageUrl || current.imageUrl
 
-    // If link changed and no explicit new image was given, re-fetch thumbnail
     if ((req.body.link || req.body.liveLink) && !req.body.imageUrl && updatedLink !== (current.link || current.liveLink)) {
       updatedImageUrl = await extractPreviewImage(updatedLink)
     }
@@ -188,6 +167,7 @@ export const updateProject = async (req, res, next) => {
       link: updatedLink,
       liveLink: updatedLink,
       imageUrl: updatedImageUrl,
+      featured: req.body.featured !== undefined ? Boolean(req.body.featured) : current.featured,
       updatedAt: new Date().toISOString(),
     }
 
@@ -201,21 +181,21 @@ export const updateProject = async (req, res, next) => {
 }
 
 /**
- * DELETE /api/admin/projects/:id - Delete project
+ * DELETE /api/projects/admin/:id - Delete project
  */
-export const deleteProject = async (req, res, next) => {
+export const deleteProject = (req, res, next) => {
   try {
     const { id } = req.params
-    let projects = readProjects()
+    const projects = readProjects()
     const initialLength = projects.length
 
-    projects = projects.filter((p) => String(p.id) !== String(id) && String(p._id) !== String(id))
+    const filtered = projects.filter((p) => String(p.id) !== String(id) && String(p._id) !== String(id))
 
-    if (projects.length === initialLength) {
+    if (filtered.length === initialLength) {
       return res.status(404).json({ success: false, message: 'Project not found' })
     }
 
-    writeProjects(projects)
+    writeProjects(filtered)
     res.json({ success: true, message: 'Project deleted successfully' })
   } catch (error) {
     next(error)

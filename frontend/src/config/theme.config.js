@@ -5,9 +5,8 @@
 
 export const DEFAULT_THEME = {
   // Brand / Accents (Home page visual identity)
-  primaryColor: '#06b6d4', // Neon Cyan
-  secondaryColor: '#3b82f6', // Electric Blue
-  accentColor: '#8b5cf6', // Violet Purple
+  primaryColor: '#8999b3', // Soft Blue-Grey
+  secondaryColor: '#404242', // Dark Graphite
 
   // Canvas & Surfaces
   bgColor: '#050505', // Deep Black
@@ -20,7 +19,7 @@ export const DEFAULT_THEME = {
 
   // Borders
   borderColor: 'rgba(255, 255, 255, 0.08)',
-  borderHoverColor: 'rgba(6, 182, 212, 0.35)',
+  borderHoverColor: 'rgba(137, 153, 179, 0.35)',
 
   // Semantic Status Tokens (Predefined)
   successColor: '#10b981',
@@ -31,9 +30,9 @@ export const DEFAULT_THEME = {
 
 export const THEME_PRESETS = [
   {
-    name: 'Neon Cyan (Default)',
-    primaryColor: '#06b6d4',
-    secondaryColor: '#3b82f6',
+    name: 'Default (Soft Blue-Grey)',
+    primaryColor: '#8999b3',
+    secondaryColor: '#404242',
     accentColor: '#8b5cf6',
     bgColor: '#050505',
     cardBgColor: '#09090c',
@@ -41,7 +40,7 @@ export const THEME_PRESETS = [
     textColor: '#ffffff',
     mutedTextColor: '#a1a1aa',
     borderColor: 'rgba(255, 255, 255, 0.08)',
-    borderHoverColor: 'rgba(6, 182, 212, 0.35)',
+    borderHoverColor: 'rgba(137, 153, 179, 0.35)',
   },
   {
     name: 'Cyber Emerald',
@@ -110,7 +109,7 @@ export const THEME_PRESETS = [
   },
 ]
 
-export const hexToRgb = (hex, fallback = '6, 182, 212') => {
+export const hexToRgb = (hex, fallback = '137, 153, 179') => {
   if (!hex || typeof hex !== 'string') return fallback
   let c = hex.replace('#', '')
   if (c.length === 3) c = c.split('').map((x) => x + x).join('')
@@ -143,7 +142,7 @@ export const applyThemeToRoot = (theme = DEFAULT_THEME, targetElement = null) =>
   const info = theme.infoColor || DEFAULT_THEME.infoColor
 
   root.style.setProperty('--color-primary', primary)
-  root.style.setProperty('--color-primary-rgb', hexToRgb(primary, '6, 182, 212'))
+  root.style.setProperty('--color-primary-rgb', hexToRgb(primary, '137, 153, 179'))
   root.style.setProperty('--color-secondary', secondary)
   root.style.setProperty('--color-secondary-rgb', hexToRgb(secondary, '59, 130, 246'))
   root.style.setProperty('--color-accent', accent)

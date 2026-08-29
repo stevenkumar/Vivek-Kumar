@@ -170,7 +170,7 @@ export const ThemeSettingsSection = ({ onToast }) => {
               <div
                 className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border"
                 style={{
-                  backgroundColor: 'rgba(6, 182, 212, 0.1)',
+                  backgroundColor: 'rgba(137, 153, 179, 0.1)',
                   color: themeForm.primaryColor,
                   borderColor: themeForm.primaryColor,
                 }}

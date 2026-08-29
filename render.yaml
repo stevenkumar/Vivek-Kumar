@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: vivek-portfolio
+    runtime: node
+    plan: starter
+    region: oregon
+    rootDir: .
+    buildCommand: npm install && cd frontend && npm install && npm run build
+    startCommand: cd backend && npm install --omit=dev && node api/index.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CLIENT_URL
+        sync: false
+      - key: EMAIL_USER
+        sync: false
+      - key: EMAIL_PASS
+        sync: false
+      - key: EMAIL_TO
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false

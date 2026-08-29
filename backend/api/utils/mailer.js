@@ -1,15 +1,15 @@
 import nodemailer from 'nodemailer'
 
 /**
- * Creates a Nodemailer transporter.
- * Uses Gmail SMTP by default, but can be configured with any SMTP service.
+ * Creates a Nodemailer transporter using Gmail SMTP by default.
+ * Falls back to a console simulator when credentials are not configured.
  */
 const createTransporter = () => {
   const user = process.env.EMAIL_USER
   const pass = process.env.EMAIL_PASS
 
   if (!user || !pass) {
-    console.warn('⚠️ EMAIL_USER or EMAIL_PASS not configured in environment. Emails will be simulated in console.')
+    console.warn('⚠️ EMAIL_USER or EMAIL_PASS not configured. Emails will be simulated in console.')
     return null
   }
 
@@ -21,7 +21,7 @@ const createTransporter = () => {
 
 /**
  * Sends an email using Nodemailer.
- * If credentials are missing, logs the email details to console (useful in development).
+ * If credentials are missing, logs the email to console (useful in development).
  */
 export const sendMail = async ({ to, subject, text, html, replyTo }) => {
   const transporter = createTransporter()

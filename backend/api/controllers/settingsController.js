@@ -1,29 +1,35 @@
 import fs from 'fs'
 import path from 'path'
-import { fileURLToPath } from 'url'
 import multer from 'multer'
+import { readJson, writeJson, UPLOADS_DIR } from '../store.js'
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const SETTINGS_PATH = path.join(__dirname, '..', 'data', 'settings.json')
-const UPLOADS_DIR = path.join(__dirname, '..', 'uploads')
+const SETTINGS_FILE = 'settings.json'
 
-// Ensure uploads folder exists
-if (!fs.existsSync(UPLOADS_DIR)) {
-  fs.mkdirSync(UPLOADS_DIR, { recursive: true })
+// Ensure the uploads folder exists (local / VPS / cPanel deployments).
+// Wrapped in try/catch so this never crashes import on read-only hosts (Vercel).
+try {
+  if (!fs.existsSync(UPLOADS_DIR)) {
+    fs.mkdirSync(UPLOADS_DIR, { recursive: true })
+  }
+} catch (err) {
+  console.warn('Uploads directory unavailable (read-only host):', err.message)
 }
 
-// Configure multer storage for resume uploads
+// Disk storage for resume uploads (works on Node VPS / cPanel / localhost).
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    if (!fs.existsSync(UPLOADS_DIR)) {
-      fs.mkdirSync(UPLOADS_DIR, { recursive: true })
+    try {
+      if (!fs.existsSync(UPLOADS_DIR)) {
+        fs.mkdirSync(UPLOADS_DIR, { recursive: true })
+      }
+      cb(null, UPLOADS_DIR)
+    } catch (err) {
+      cb(err)
     }
-    cb(null, UPLOADS_DIR)
   },
   filename: (req, file, cb) => {
     const ext = path.extname(file.originalname).toLowerCase() || '.pdf'
-    const safeName = `resume-${Date.now()}${ext}`
-    cb(null, safeName)
+    cb(null, `resume-${Date.now()}${ext}`)
   },
 })
 
@@ -31,8 +37,8 @@ export const resumeUploadMiddleware = multer({
   storage,
   limits: { fileSize: 15 * 1024 * 1024 }, // 15MB limit
   fileFilter: (req, file, cb) => {
-    const allowed = ['.pdf', '.doc', '.docx']
     const ext = path.extname(file.originalname).toLowerCase()
+    const allowed = ['.pdf', '.doc', '.docx']
     if (allowed.includes(ext) || file.mimetype === 'application/pdf') {
       cb(null, true)
     } else {
@@ -41,21 +47,8 @@ export const resumeUploadMiddleware = multer({
   },
 }).single('resume')
 
-const readSettings = () => {
-  try {
-    if (fs.existsSync(SETTINGS_PATH)) {
-      const data = fs.readFileSync(SETTINGS_PATH, 'utf-8')
-      return JSON.parse(data)
-    }
-  } catch (err) {
-    console.error('Error reading settings.json:', err)
-  }
-  return {}
-}
-
-const writeSettings = (data) => {
-  fs.writeFileSync(SETTINGS_PATH, JSON.stringify(data, null, 2), 'utf-8')
-}
+const readSettings = () => readJson(SETTINGS_FILE, {})
+const writeSettings = (data) => writeJson(SETTINGS_FILE, data)
 
 /**
  * GET /api/settings - Public settings
@@ -66,6 +59,7 @@ export const getSettings = (req, res) => {
     const { adminPassword, ...safeSettings } = settings
     res.json({ success: true, data: safeSettings })
   } catch (error) {
+    console.error('Error reading settings:', error)
     res.status(500).json({ success: false, message: 'Failed to read settings' })
   }
 }
@@ -126,7 +120,7 @@ export const changeAdminPassword = (req, res) => {
 }
 
 /**
- * POST /api/settings/admin/upload-resume - Upload Resume PDF from Mobile or Desktop
+ * POST /api/settings/admin/upload-resume - Upload Resume PDF
  */
 export const uploadResume = (req, res) => {
   if (!req.file) {
@@ -139,7 +133,6 @@ export const uploadResume = (req, res) => {
 
     if (!settings.socials) settings.socials = {}
     settings.socials.resumeUrl = fileUrl
-
     writeSettings(settings)
 
     res.json({
@@ -171,6 +164,7 @@ export const updateSettings = (req, res) => {
     const { adminPassword, ...safeUpdated } = updated
     res.json({ success: true, data: safeUpdated, message: 'Settings updated successfully' })
   } catch (error) {
+    console.error('Error updating settings:', error)
     res.status(500).json({ success: false, message: 'Failed to update settings' })
   }
 }

@@ -1,30 +1,10 @@
-import fs from 'fs'
-import path from 'path'
-import { fileURLToPath } from 'url'
+import { readJson, writeJson } from '../store.js'
 import { sendMail } from '../utils/mailer.js'
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const MESSAGES_PATH = path.join(__dirname, '..', 'data', 'messages.json')
+const MESSAGES_FILE = 'messages.json'
 
-const readMessages = () => {
-  try {
-    if (fs.existsSync(MESSAGES_PATH)) {
-      const data = fs.readFileSync(MESSAGES_PATH, 'utf-8')
-      return JSON.parse(data)
-    }
-  } catch (err) {
-    console.error('Error reading messages.json:', err)
-  }
-  return []
-}
-
-const writeMessages = (messages) => {
-  try {
-    fs.writeFileSync(MESSAGES_PATH, JSON.stringify(messages, null, 2), 'utf-8')
-  } catch (err) {
-    console.error('Error writing messages.json:', err)
-  }
-}
+const readMessages = () => readJson(MESSAGES_FILE, [])
+const writeMessages = (messages) => writeJson(MESSAGES_FILE, messages)
 
 /**
  * Public Contact Form Submission Handler
@@ -33,7 +13,6 @@ export const sendContactMessage = async (req, res, next) => {
   try {
     const { name, email, number, message } = req.body
 
-    // Input validation
     if (!name || !email || !message) {
       return res.status(400).json({
         success: false,
@@ -53,7 +32,7 @@ export const sendContactMessage = async (req, res, next) => {
     const subject = `📬 New Portfolio Inquiry from ${name.trim()}`
     const timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'full', timeStyle: 'medium' })
 
-    // 1. Save message to file-based inbox (Zero database)
+    // 1. Save message to file-based inbox
     const newMessage = {
       id: Date.now(),
       _id: `msg-${Date.now()}`,
@@ -205,16 +184,16 @@ export const toggleMessageRead = (req, res) => {
 export const deleteAdminMessage = (req, res) => {
   try {
     const { id } = req.params
-    let messages = readMessages()
+    const messages = readMessages()
     const initialLength = messages.length
 
-    messages = messages.filter((m) => String(m.id) !== String(id) && String(m._id) !== String(id))
+    const filtered = messages.filter((m) => String(m.id) !== String(id) && String(m._id) !== String(id))
 
-    if (messages.length === initialLength) {
+    if (filtered.length === initialLength) {
       return res.status(404).json({ success: false, message: 'Message not found' })
     }
 
-    writeMessages(messages)
+    writeMessages(filtered)
     res.json({ success: true, message: 'Message deleted successfully' })
   } catch (error) {
     res.status(500).json({ success: false, message: 'Failed to delete message' })

@@ -2,11 +2,11 @@
 
 :root {
   /* Brand / Accents */
-  --color-primary: #323334;
-  --color-primary-rgb: 6, 182, 212;
-  --color-secondary: #737882;
-  --color-secondary-rgb: 59, 130, 246;
-  --color-accent: #7f8288;
+  --color-primary: #404242;
+  --color-primary-rgb: 137, 153, 179;
+  --color-secondary: #8999b3;
+  --color-secondary-rgb: 64, 66, 66;
+  --color-accent: #8b5cf6;
   --color-accent-rgb: 139, 92, 246;
 
   /* Surfaces */
@@ -16,12 +16,11 @@
 
   /* Typography */
   --color-text: #ffffff;
-  /* --color-text-muted: #a1a1aa; */
-  --color-text-muted: #b3aeae;
+  --color-text-muted: #a1a1aa;
 
   /* Borders */
   --color-border: rgba(255, 255, 255, 0.08);
-  --color-border-hover: rgba(6, 182, 212, 0.35);
+  --color-border-hover: rgba(137, 153, 179, 0.35);
 
   /* Semantics */
   --color-success: #10b981;
