@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Github, Twitter, Linkedin, Copy, Check, ArrowUpRight, Lock } from 'lucide-react'
+import { Github, Twitter, Linkedin, Copy, Check, ArrowUpRight } from 'lucide-react'
 import { useSettings } from '../../context/SettingsContext'
 
 const Footer = ({ onNavigate }) => {
@@ -113,19 +113,6 @@ const Footer = ({ onNavigate }) => {
           <div className="flex items-center gap-6 text-[11px] font-bold text-theme-muted uppercase tracking-[0.15em]">
             <p>© {new Date().getFullYear()}</p>
             <p>Made By {profile?.name || 'Vivek Kumar'}</p>
-            {/* <a
-              href="#admin"
-              onClick={(e) => {
-                e.preventDefault()
-                if (onNavigate) onNavigate('admin')
-                else window.location.hash = '#admin'
-              }}
-              className="inline-flex items-center gap-1 text-theme-muted hover:text-theme-primary transition-colors lowercase font-mono text-[10px]"
-              title="Admin Customization Panel"
-            >
-              <Lock size={11} />
-              <span>admin</span>
-            </a> */}
           </div>
 
           <div className="flex items-center gap-6">
