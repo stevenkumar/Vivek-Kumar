@@ -113,7 +113,7 @@ const Footer = ({ onNavigate }) => {
           <div className="flex items-center gap-6 text-[11px] font-bold text-theme-muted uppercase tracking-[0.15em]">
             <p>© {new Date().getFullYear()}</p>
             <p>Made By {profile?.name || 'Vivek Kumar'}</p>
-            <a
+            {/* <a
               href="#admin"
               onClick={(e) => {
                 e.preventDefault()
@@ -125,7 +125,7 @@ const Footer = ({ onNavigate }) => {
             >
               <Lock size={11} />
               <span>admin</span>
-            </a>
+            </a> */}
           </div>
 
           <div className="flex items-center gap-6">
