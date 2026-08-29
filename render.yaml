@@ -5,8 +5,8 @@ services:
     plan: starter
     region: oregon
     rootDir: .
-    buildCommand: npm install && cd frontend && npm install && npm run build
-    startCommand: cd backend && npm install --omit=dev && node api/index.js
+    buildCommand: npm install
+    startCommand: npm start
     healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV

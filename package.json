@@ -7,9 +7,11 @@
     "dev": "cd frontend && npm run dev",
     "build": "cd frontend && npm run build",
     "preview": "cd frontend && npm run preview",
+    "start": "cd backend && node api/index.js",
     "backend": "cd backend && node api/index.js",
     "backend:dev": "cd backend && node --watch api/index.js",
-    "dev:all": "concurrently \"npm run dev\" \"npm run backend:dev\""
+    "dev:all": "concurrently \"npm run dev\" \"npm run backend:dev\"",
+    "postinstall": "npm --prefix frontend install && npm --prefix frontend run build"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",

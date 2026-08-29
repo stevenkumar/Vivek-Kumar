@@ -151,10 +151,15 @@ app.use((req, res) => {
 // ─── ERROR HANDLER ───────────────────────────────────────────────────────────
 app.use(errorHandler)
 
-// ─── LOCAL / RENDER STANDALONE SERVER ────────────────────────────────────────
-// Listens on its own port for local dev and Render Web Service.
-// Skipped on Vercel, where the serverless handler invokes the exported app.
-if (!process.env.VERCEL) {
+// ─── STANDALONE SERVER ────────────────────────────────────────────────────────
+// Starts a listening server ONLY when this file is run directly
+// (e.g. `node backend/api/index.js`, local dev, or Render `npm start`).
+// When imported by the root entry (Vercel handler / root api/index.js), this
+// module just exports the Express app and lets the caller decide.
+const __thisFile = fileURLToPath(import.meta.url)
+const isDirectEntry = process.argv[1] && path.resolve(process.argv[1]) === path.resolve(__thisFile)
+
+if (isDirectEntry) {
   const PORT = process.env.PORT || 5000
   const server = app.listen(PORT, () => {
     console.log(`✅ Backend server running on http://localhost:${PORT}`)
