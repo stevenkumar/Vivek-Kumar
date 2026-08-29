@@ -118,13 +118,14 @@ app.use('/api/projects', projectRoutes)
 app.use('/api/contact', contactRoutes)
 app.use('/api/media', mediaRoutes)
 
-// ─── STATIC FRONTEND (production only) ───────────────────────────────────────
+// ─── STATIC FRONTEND ─────────────────────────────────────────────────────────
 // Serves the built Vite app (root dist/) from the same service so a single
 // Render Web Service hosts both frontend and API. Falls back to index.html
-// for SPA client-side routing. In dev, Vite serves and proxies /api instead.
+// for SPA client-side routing. Enabled whenever the build output exists, so it
+// works regardless of NODE_ENV (Render may not set it to "production").
 const DIST_DIR = path.resolve(__dirname, '..', '..', 'dist')
 const indexHtml = path.join(DIST_DIR, 'index.html')
-if (process.env.NODE_ENV === 'production' && fs.existsSync(indexHtml)) {
+if (fs.existsSync(indexHtml)) {
   app.use(express.static(DIST_DIR))
   app.get(/^\/(?!api\/|uploads\/).*/, (req, res, next) => {
     const requested = path.join(DIST_DIR, req.path)
@@ -133,6 +134,9 @@ if (process.env.NODE_ENV === 'production' && fs.existsSync(indexHtml)) {
     }
     res.sendFile(indexHtml)
   })
+  console.log(`🌐 Serving frontend from: ${DIST_DIR}`)
+} else {
+  console.warn(`⚠️  Frontend build not found at ${DIST_DIR} - static serving disabled`)
 }
 
 // ─── 404 HANDLER ─────────────────────────────────────────────────────────────
