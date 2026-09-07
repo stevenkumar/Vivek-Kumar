@@ -147,6 +147,18 @@ if (fs.existsSync(indexHtml)) {
   console.warn(`⚠️  Frontend build not found at ${DIST_DIR} - static serving disabled`)
 }
 
+// ─── ROOT ROUTE FALLBACK ─────────────────────────────────────────────────────
+app.get('/', (req, res) => {
+  if (fs.existsSync(indexHtml)) {
+    return res.sendFile(indexHtml)
+  }
+  res.status(200).json({
+    success: true,
+    message: 'Vivek Kumar Portfolio API is running',
+    health: '/api/health',
+  })
+})
+
 // ─── 404 HANDLER ─────────────────────────────────────────────────────────────
 app.use((req, res) => {
   console.warn(`[404] Route not found: ${req.method} ${req.path}`)
