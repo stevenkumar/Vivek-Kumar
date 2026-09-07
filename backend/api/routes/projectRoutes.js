@@ -6,6 +6,7 @@ import {
   deleteProject,
   fetchPreviewImage,
 } from '../controllers/projectController.js'
+import { requireAdmin } from '../middleware/adminAuth.js'
 
 const router = express.Router()
 
@@ -13,9 +14,9 @@ const router = express.Router()
 router.get('/', getProjects)
 
 // Admin — CRUD
-router.post('/admin/fetch-preview', fetchPreviewImage)
-router.post('/admin', createProject)
-router.put('/admin/:id', updateProject)
-router.delete('/admin/:id', deleteProject)
+router.post('/admin/fetch-preview', requireAdmin, fetchPreviewImage)
+router.post('/admin', requireAdmin, createProject)
+router.put('/admin/:id', requireAdmin, updateProject)
+router.delete('/admin/:id', requireAdmin, deleteProject)
 
 export default router

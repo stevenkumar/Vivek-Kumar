@@ -10,6 +10,7 @@ import ThemeSettingsSection from './sections/ThemeSettingsSection'
 import ProjectsSection from './sections/ProjectsSection'
 import MessagesSection from './sections/MessagesSection'
 import AccountSettingsSection from './sections/AccountSettingsSection'
+import { adminFetch } from '../../lib/api'
 
 const Toast = ({ msg, type, onDone }) => {
   useEffect(() => {
@@ -78,7 +79,7 @@ export const AdminPanel = ({ onExit }) => {
   const loadMessages = useCallback(async () => {
     setMessagesLoading(true)
     try {
-      const res = await fetch('/api/contact/admin/messages')
+      const res = await adminFetch('/api/contact/admin/messages')
       if (res.ok) {
         const json = await res.json()
         setMessages(json.data || [])
@@ -160,7 +161,7 @@ export const AdminPanel = ({ onExit }) => {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter password (default: Admin123!)"
+                placeholder="Enter your configured admin password"
                 required
                 className="w-full bg-theme-canvas border border-theme rounded-xl px-4 py-3 text-theme-base text-sm focus:outline-none focus:border-theme-primary transition-all font-mono"
               />

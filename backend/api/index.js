@@ -74,7 +74,7 @@ app.use(
       ) {
         callback(null, true)
       } else {
-        callback(null, true)
+        callback(new Error('Origin is not allowed by CORS'))
       }
     },
     credentials: true,
@@ -160,10 +160,8 @@ app.use((req, res) => {
 app.use(errorHandler)
 
 // ─── STANDALONE SERVER ────────────────────────────────────────────────────────
-// Starts a listening server ONLY when this file is run directly
-// (e.g. `node backend/api/index.js`, local dev, or Render `npm start`).
-// When imported by the root entry (Vercel handler / root api/index.js), this
-// module just exports the Express app and lets the caller decide.
+// Starts a listening server only when this file is run directly
+// (e.g. `node backend/api/index.js`, local development, or Render).
 const __thisFile = fileURLToPath(import.meta.url)
 const isDirectEntry = process.argv[1] && path.resolve(process.argv[1]) === path.resolve(__thisFile)
 

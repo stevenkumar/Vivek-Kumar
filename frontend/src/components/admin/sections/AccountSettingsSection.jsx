@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { ShieldCheck, Lock, Key, Loader2, Save, CheckCircle2, AlertCircle } from 'lucide-react'
 import AdminCard from '../ui/AdminCard'
+import { adminFetch } from '../../../lib/api'
 
 export const AccountSettingsSection = ({ onToast, onLogout }) => {
   const [currentPassword, setCurrentPassword] = useState('')
@@ -25,7 +26,7 @@ export const AccountSettingsSection = ({ onToast, onLogout }) => {
 
     setLoading(true)
     try {
-      const res = await fetch('/api/settings/admin/change-password', {
+      const res = await adminFetch('/api/settings/admin/change-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ currentPassword, newPassword }),
@@ -65,7 +66,7 @@ export const AccountSettingsSection = ({ onToast, onLogout }) => {
             <input
               type="password"
               required
-              placeholder="Enter current password (default: Admin123!)"
+              placeholder="Enter your current admin password"
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
               className="w-full bg-theme-canvas border border-theme rounded-xl px-4 py-3 text-sm text-theme-base focus:outline-none focus:border-theme-primary transition-all font-mono"

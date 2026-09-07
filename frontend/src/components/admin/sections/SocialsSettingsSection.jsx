@@ -18,6 +18,7 @@ import {
 } from 'lucide-react'
 import AdminCard from '../ui/AdminCard'
 import { useSettings } from '../../../context/SettingsContext'
+import { adminFetch } from '../../../lib/api'
 
 export const SocialsSettingsSection = ({ onToast }) => {
   const { settings, socials, updateSocials, saveSettingsToServer } = useSettings()
@@ -56,7 +57,7 @@ export const SocialsSettingsSection = ({ onToast }) => {
       const formData = new FormData()
       formData.append('resume', file)
 
-      const res = await fetch('/api/settings/admin/upload-resume', {
+      const res = await adminFetch('/api/settings/admin/upload-resume', {
         method: 'POST',
         body: formData,
       })

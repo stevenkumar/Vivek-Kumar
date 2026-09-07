@@ -15,6 +15,7 @@ import {
 import AdminCard from '../ui/AdminCard'
 import AdminModal from '../ui/AdminModal'
 import ConfirmDialog from '../ui/ConfirmDialog'
+import { adminFetch } from '../../../lib/api'
 
 export const ProjectsSection = ({ projects = [], loading = false, onReload, onToast }) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -68,7 +69,7 @@ export const ProjectsSection = ({ projects = [], loading = false, onReload, onTo
     }
     setFetchingPreview(true)
     try {
-      const res = await fetch('/api/projects/admin/fetch-preview', {
+      const res = await adminFetch('/api/projects/admin/fetch-preview', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url: form.link }),
@@ -100,7 +101,7 @@ export const ProjectsSection = ({ projects = [], loading = false, onReload, onTo
         : '/api/projects/admin'
       const method = editingProject ? 'PUT' : 'POST'
 
-      const res = await fetch(url, {
+      const res = await adminFetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -122,7 +123,7 @@ export const ProjectsSection = ({ projects = [], loading = false, onReload, onTo
     if (!deleteTarget) return
     setActionLoading(true)
     try {
-      const res = await fetch(`/api/projects/admin/${deleteTarget._id || deleteTarget.id}`, { method: 'DELETE' })
+      const res = await adminFetch(`/api/projects/admin/${deleteTarget._id || deleteTarget.id}`, { method: 'DELETE' })
       if (!res.ok) throw new Error('Failed to delete project')
       onToast('Project deleted successfully', 'success')
       setDeleteTarget(null)

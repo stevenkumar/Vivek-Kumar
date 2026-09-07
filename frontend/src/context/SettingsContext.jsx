@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { DEFAULT_THEME, applyThemeToRoot } from '../config/theme.config'
+import { adminFetch } from '../lib/api'
 
 const DEFAULT_PROFILE = {
   name: 'Vivek Kumar',
@@ -112,7 +113,7 @@ export const SettingsProvider = ({ children }) => {
   const saveSettingsToServer = async (customPayload = null) => {
     const payload = customPayload || settings
     try {
-      const res = await fetch('/api/settings/admin/settings', {
+      const res = await adminFetch('/api/settings/admin/settings', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),

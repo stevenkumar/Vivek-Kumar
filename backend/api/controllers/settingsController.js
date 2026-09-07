@@ -2,11 +2,11 @@ import fs from 'fs'
 import path from 'path'
 import multer from 'multer'
 import { readJson, writeJson, UPLOADS_DIR } from '../store.js'
+import { createAdminToken } from '../middleware/adminAuth.js'
 
 const SETTINGS_FILE = 'settings.json'
 
-// Ensure the uploads folder exists (local / VPS / cPanel deployments).
-// Wrapped in try/catch so this never crashes import on read-only hosts (Vercel).
+// Ensure the uploads folder exists for Render, VPS, cPanel, and local deployments.
 try {
   if (!fs.existsSync(UPLOADS_DIR)) {
     fs.mkdirSync(UPLOADS_DIR, { recursive: true })
@@ -71,7 +71,11 @@ export const adminLogin = (req, res) => {
   try {
     const { password } = req.body
     const settings = readSettings()
-    const expectedPassword = settings.adminPassword || process.env.ADMIN_PASSWORD || 'Admin123!'
+    const expectedPassword = process.env.ADMIN_PASSWORD || settings.adminPassword || (process.env.NODE_ENV !== 'production' ? 'Admin123!' : '')
+
+    if (!expectedPassword) {
+      return res.status(500).json({ success: false, message: 'Admin authentication is not configured' })
+    }
 
     if (!password) {
       return res.status(400).json({ success: false, message: 'Password is required' })
@@ -81,7 +85,7 @@ export const adminLogin = (req, res) => {
       return res.status(401).json({ success: false, message: 'Invalid admin password' })
     }
 
-    const token = Buffer.from(`admin_${Date.now()}_${expectedPassword}`).toString('base64')
+    const token = createAdminToken(expectedPassword)
     res.json({ success: true, token, message: 'Login successful' })
   } catch (error) {
     res.status(500).json({ success: false, message: 'Authentication error' })
@@ -95,7 +99,7 @@ export const changeAdminPassword = (req, res) => {
   try {
     const { currentPassword, newPassword } = req.body
     const settings = readSettings()
-    const expectedPassword = settings.adminPassword || process.env.ADMIN_PASSWORD || 'Admin123!'
+    const expectedPassword = process.env.ADMIN_PASSWORD || settings.adminPassword || (process.env.NODE_ENV !== 'production' ? 'Admin123!' : '')
 
     if (!currentPassword || !newPassword) {
       return res.status(400).json({ success: false, message: 'Both current and new passwords are required' })
@@ -109,10 +113,17 @@ export const changeAdminPassword = (req, res) => {
       return res.status(400).json({ success: false, message: 'New password must be at least 6 characters long' })
     }
 
+    if (process.env.ADMIN_PASSWORD) {
+      return res.status(400).json({
+        success: false,
+        message: 'Change ADMIN_PASSWORD in the hosting environment instead.',
+      })
+    }
+
     settings.adminPassword = newPassword
     writeSettings(settings)
 
-    const newToken = Buffer.from(`admin_${Date.now()}_${newPassword}`).toString('base64')
+    const newToken = createAdminToken(newPassword)
     res.json({ success: true, token: newToken, message: 'Admin password updated successfully' })
   } catch (error) {
     res.status(500).json({ success: false, message: 'Failed to update admin password' })

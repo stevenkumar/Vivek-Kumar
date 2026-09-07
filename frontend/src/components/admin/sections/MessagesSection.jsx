@@ -15,6 +15,7 @@ import {
 import AdminCard from '../ui/AdminCard'
 import AdminModal from '../ui/AdminModal'
 import ConfirmDialog from '../ui/ConfirmDialog'
+import { adminFetch } from '../../../lib/api'
 
 export const MessagesSection = ({ messages = [], loading = false, onReload, onToast }) => {
   const [selectedMessage, setSelectedMessage] = useState(null)
@@ -25,7 +26,7 @@ export const MessagesSection = ({ messages = [], loading = false, onReload, onTo
     e?.stopPropagation()
     try {
       const nextState = !msg.isRead
-      const res = await fetch(`/api/contact/admin/messages/${msg.id || msg._id}/read`, {
+      const res = await adminFetch(`/api/contact/admin/messages/${msg.id || msg._id}/read`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ isRead: nextState }),
@@ -43,7 +44,7 @@ export const MessagesSection = ({ messages = [], loading = false, onReload, onTo
     if (!deleteTarget) return
     setActionLoading(true)
     try {
-      const res = await fetch(`/api/contact/admin/messages/${deleteTarget.id || deleteTarget._id}`, {
+      const res = await adminFetch(`/api/contact/admin/messages/${deleteTarget.id || deleteTarget._id}`, {
         method: 'DELETE',
       })
       if (!res.ok) throw new Error('Failed to delete message')
