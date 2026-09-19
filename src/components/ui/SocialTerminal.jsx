@@ -35,11 +35,13 @@ const SocialTerminal = () => {
   const [input, setInput] = useState('')
   const [logs, setLogs] = useState(initialLogs)
   const [copied, setCopied] = useState(false)
-  const terminalEndRef = useRef(null)
+  const terminalLogsRef = useRef(null)
   const inputRef = useRef(null)
 
   const scrollToBottom = () => {
-    terminalEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    if (terminalLogsRef.current) {
+      terminalLogsRef.current.scrollTop = terminalLogsRef.current.scrollHeight
+    }
   }
 
   useEffect(() => {
@@ -255,7 +257,10 @@ Fill out the contact form on the right to start building together!`,
       </div>
 
       {/* Terminal Screen / Logs */}
-      <div className="bg-theme-canvas rounded-xl border border-theme p-4 h-56 sm:h-64 overflow-y-auto font-mono text-xs text-theme-muted space-y-2 select-text custom-scrollbar">
+      <div
+        ref={terminalLogsRef}
+        className="bg-theme-canvas rounded-xl border border-theme p-4 h-56 sm:h-64 overflow-y-auto font-mono text-xs text-theme-muted space-y-2 select-text custom-scrollbar"
+      >
         {logs.map((log, i) => (
           <div key={i} className="leading-relaxed">
             {log.type === 'system' && <span className="text-zinc-500">{log.text}</span>}
@@ -267,7 +272,6 @@ Fill out the contact form on the right to start building together!`,
             {log.type === 'output' && <pre className="text-theme-base whitespace-pre-wrap font-mono mt-1">{log.text}</pre>}
           </div>
         ))}
-        <div ref={terminalEndRef} />
       </div>
 
       {/* Interactive Command Input Form */}

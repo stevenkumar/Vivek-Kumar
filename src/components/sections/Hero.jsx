@@ -81,7 +81,7 @@ const Hero = ({ onNavigateToContact }) => {
           variant="primary"
           size="lg"
           onClick={onNavigateToContact}
-          className="w-full sm:w-64 py-4 rounded-xl shadow-xl hover:scale-[1.02] transition-transform"
+          className="w-full sm:w-64 py-4 rounded-xl  hover:scale-[1.02] transition-transform"
         >
           Contact Me
         </Button>

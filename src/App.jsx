@@ -24,13 +24,44 @@ function AppContent() {
   const [currentView, setCurrentView] = useState(getViewFromHash)
 
   useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual'
+    }
+  }, [])
+
+  useEffect(() => {
     const handleHash = () => {
-      setCurrentView(getViewFromHash())
+      const view = getViewFromHash()
+      setCurrentView(view)
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+      document.documentElement.scrollTop = 0
+      document.body.scrollTop = 0
     }
     handleHash()
     window.addEventListener('hashchange', handleHash)
     return () => window.removeEventListener('hashchange', handleHash)
   }, [])
+
+  useEffect(() => {
+    const scrollToTop = () => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+      document.documentElement.scrollTop = 0
+      document.body.scrollTop = 0
+    }
+
+    scrollToTop()
+    const rAF = requestAnimationFrame(scrollToTop)
+    const t1 = setTimeout(scrollToTop, 50)
+    const t2 = setTimeout(scrollToTop, 150)
+    const t3 = setTimeout(scrollToTop, 520)
+
+    return () => {
+      cancelAnimationFrame(rAF)
+      clearTimeout(t1)
+      clearTimeout(t2)
+      clearTimeout(t3)
+    }
+  }, [currentView])
 
   const handleOpenProfile = () => setIsProfileOpen(true)
   const handleCloseProfile = () => setIsProfileOpen(false)
@@ -42,7 +73,9 @@ function AppContent() {
     } else {
       window.location.hash = `#${view}`
     }
-    window.scrollTo(0, 0)
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+    document.documentElement.scrollTop = 0
+    document.body.scrollTop = 0
   }
 
   const handleNavigateHome = () => handleNavigate('home')

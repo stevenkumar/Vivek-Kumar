@@ -6,9 +6,47 @@ import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
+const contactApiPlugin = () => ({
+  name: 'contact-api-plugin',
+  configureServer(server) {
+    server.middlewares.use(async (req, res, next) => {
+      const url = (req.url || '').split('?')[0]
+      if (url === '/api/contact') {
+        if (req.method === 'POST') {
+          let rawBody = ''
+          req.on('data', (chunk) => {
+            rawBody += chunk
+          })
+          req.on('end', async () => {
+            try {
+              req.body = rawBody ? JSON.parse(rawBody) : {}
+            } catch {
+              req.body = {}
+            }
+            try {
+              const { default: handler } = await import('./api/contact.js')
+              return handler(req, res)
+            } catch (err) {
+              console.error('API Contact handler error:', err)
+              res.statusCode = 500
+              res.setHeader('Content-Type', 'application/json')
+              return res.end(JSON.stringify({ success: false, message: err.message }))
+            }
+          })
+          return
+        } else if (req.method === 'OPTIONS') {
+          const { default: handler } = await import('./api/contact.js')
+          return handler(req, res)
+        }
+      }
+      next()
+    })
+  },
+})
+
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [react(), tailwindcss(), contactApiPlugin()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

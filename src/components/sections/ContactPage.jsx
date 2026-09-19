@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import {
   Mail,
@@ -28,6 +28,12 @@ const ContactPage = ({ onNavigateHome }) => {
   const [successMessage, setSuccessMessage] = useState('')
   const [thankYouOpen, setThankYouOpen] = useState(false)
   const [emailCopied, setEmailCopied] = useState(false)
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+    document.documentElement.scrollTop = 0
+    document.body.scrollTop = 0
+  }, [])
 
   const directEmail = socials?.email || 'vkvseri@gmail.com'
 
@@ -60,30 +66,39 @@ const ContactPage = ({ onNavigateHome }) => {
     return Object.keys(newErrors).length === 0
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setSubmitError('')
     if (!validate()) return
 
     setIsSubmitting(true)
     try {
-      const subject = `Portfolio Contact from ${formData.name}`
-      const body = [
-        `Name: ${formData.name}`,
-        `Email: ${formData.email}`,
-        `Phone: ${formData.number || 'N/A'}`,
-        '',
-        formData.message,
-      ].join('\n')
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          number: formData.number ? formData.number.trim() : '',
+          message: formData.message.trim(),
+        }),
+      })
 
-      window.location.href = `mailto:${directEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+      const data = await response.json()
 
-      setSuccessMessage('Got it! Your email client is open — just hit send to reach me directly.')
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || 'Failed to send message.')
+      }
+
+      setSuccessMessage(data.message || "Got it! Your message is in my inbox. I'll get back to you soon! 🚀")
       setThankYouOpen(true)
       setFormData({ name: '', email: '', number: '', message: '' })
       setErrors({})
     } catch (error) {
-      setSubmitError(error.message || 'Could not open your email client. Please email me directly at ' + directEmail)
+      console.error('Contact form submission error:', error)
+      setSubmitError(error.message || 'Failed to send your message. Please try again or email me directly at ' + directEmail)
     } finally {
       setIsSubmitting(false)
     }
@@ -212,7 +227,7 @@ const ContactPage = ({ onNavigateHome }) => {
                   <Typography variant="h3" className="text-xl sm:text-2xl font-bold">Send a Direct Message</Typography>
                 </div>
                 <Typography variant="body" className="text-sm mb-8">
-                  Your message is composed instantly in your email client — nothing is stored on a server.
+                  Send a message below and it will be delivered directly to my inbox via Nodemailer.
                 </Typography>
 
                 <form className="space-y-6" onSubmit={handleSubmit}>
@@ -226,7 +241,7 @@ const ContactPage = ({ onNavigateHome }) => {
                       onChange={handleChange}
                       error={errors.name}
                       icon={User}
-                      placeholder="John Doe"
+                      placeholder="name"
                     />
 
                     {/* Email Input */}
@@ -239,7 +254,7 @@ const ContactPage = ({ onNavigateHome }) => {
                       onChange={handleChange}
                       error={errors.email}
                       icon={Mail}
-                      placeholder="john@example.com"
+                      placeholder="email"
                     />
                   </div>
 
@@ -253,7 +268,7 @@ const ContactPage = ({ onNavigateHome }) => {
                     error={errors.number}
                     icon={Phone}
                     maxLength={10}
-                    placeholder="10-digit mobile number"
+                    placeholder=""
                   />
 
                   {/* Message Input */}

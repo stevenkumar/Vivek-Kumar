@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowLeft, Layers } from 'lucide-react'
 import ProjectCard from '../ui/ProjectCard'
@@ -8,6 +8,12 @@ import { projects } from '../../data/projects'
 
 const ProjectSection = ({ onNavigateHome }) => {
   const [activeCategory, setActiveCategory] = useState('All')
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+    document.documentElement.scrollTop = 0
+    document.body.scrollTop = 0
+  }, [])
 
   const categories = useMemo(() => {
     const set = new Set(['All'])

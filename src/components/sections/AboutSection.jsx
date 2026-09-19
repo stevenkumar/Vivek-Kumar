@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Github,
@@ -148,6 +148,12 @@ const AboutSection = ({ onNavigateHome }) => {
     "Hi, I'm Vivek Kumar — a Frontend Developer who is passionate about building web experiences that don't just work, but feel right."
   const storyText = profile?.story || ''
   const milestones = parseStorySections(storyText)
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+    document.documentElement.scrollTop = 0
+    document.body.scrollTop = 0
+  }, [])
 
   return (
     <section className="min-h-screen bg-theme-canvas text-theme-base py-24 px-4">
