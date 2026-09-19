@@ -163,61 +163,9 @@ const ContactPage = ({ onNavigateHome }) => {
 
         {/* Main Grid: Left Column (Quick Info + Terminal) & Right Column (Contact Form) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* Left Column: 5 Cols */}
-          <div className="lg:col-span-5 flex flex-col gap-6">
-            {/* Quick Contact Cards Box */}
-            <div className="bg-theme-card rounded-[22px] p-6 sm:p-7 border border-theme shadow-2xl space-y-4">
-              <div className="flex items-center justify-between pb-3 border-b border-theme">
-                <Typography variant="caption" className="text-theme-muted font-bold">Contact Channels</Typography>
-                <span className="flex items-center gap-1.5 text-xs text-emerald-400 font-mono">
-                  <Clock size={12} /> Response &lt; 24h
-                </span>
-              </div>
-
-              {/* Direct Email Item with Copy */}
-              <div className="flex items-center justify-between p-3.5 rounded-xl bg-theme-canvas/60 border border-theme hover:border-theme-primary transition-all group">
-                <div className="flex items-center gap-3.5">
-                  <div className="p-2.5 rounded-xl bg-theme-primary/10 text-theme-primary border border-theme">
-                    <Mail size={18} />
-                  </div>
-                  <div>
-                    <Typography variant="caption" className="text-zinc-500 block">Direct Inbox</Typography>
-                    <Typography variant="body" className="text-sm font-bold text-theme-base group-hover:text-theme-primary transition-colors">{directEmail}</Typography>
-                  </div>
-                </div>
-
-                <Button
-                  variant="secondary"
-                  size="icon"
-                  onClick={handleCopyEmail}
-                  className="h-8 w-8 text-theme-muted hover:text-theme-base"
-                  title="Copy email address"
-                >
-                  {emailCopied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
-                </Button>
-              </div>
-
-              {/* Location Item */}
-              <div className="flex items-center gap-3.5 p-3.5 rounded-xl bg-theme-canvas/60 border border-theme">
-                <div className="p-2.5 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20">
-                  <MapPin size={18} />
-                </div>
-                <div>
-                  <Typography variant="caption" className="text-zinc-500 block">Location & Zone</Typography>
-                  <Typography variant="body" className="text-sm font-bold text-theme-base">
-                    {profile?.location || 'Mumbai, India'} <span className="text-xs font-normal text-theme-muted">(IST / UTC+5:30)</span>
-                  </Typography>
-                </div>
-              </div>
-            </div>
-
-            {/* Interactive Developer Social Terminal */}
-            <SocialTerminal />
-          </div>
-
-          {/* Right Column: 7 Cols (Contact Form) */}
-          <div className="lg:col-span-7">
-            <div className="bg-theme-card rounded-[22px] p-8 sm:p-10 md:p-12 border border-theme hover:border-theme-primary transition-all duration-500 shadow-2xl relative overflow-hidden">
+          {/* Right Column: 7 Cols (Contact Form) - Displays first on mobile, right side on desktop */}
+          <div className="lg:col-span-7 order-1 lg:order-2">
+            <div className="bg-theme-card rounded-[22px] p-6 sm:p-10 md:p-12 border border-theme hover:border-theme-primary transition-all duration-500 shadow-2xl relative overflow-hidden">
               {/* Subtle background gradient glow */}
               <div className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-gradient-to-br from-blue-500/10 via-purple-500/5 to-transparent blur-3xl pointer-events-none" />
 
@@ -315,6 +263,58 @@ const ContactPage = ({ onNavigateHome }) => {
                 </form>
               </div>
             </div>
+          </div>
+
+          {/* Left Column: 5 Cols (Quick Info + Terminal) - Displays after form on mobile, left on desktop */}
+          <div className="lg:col-span-5 flex flex-col gap-6 order-2 lg:order-1">
+            {/* Quick Contact Cards Box */}
+            <div className="bg-theme-card rounded-[22px] p-6 sm:p-7 border border-theme shadow-2xl space-y-4">
+              <div className="flex items-center justify-between pb-3 border-b border-theme">
+                <Typography variant="caption" className="text-theme-muted font-bold">Contact Channels</Typography>
+                <span className="flex items-center gap-1.5 text-xs text-emerald-400 font-mono">
+                  <Clock size={12} /> Response &lt; 24h
+                </span>
+              </div>
+
+              {/* Direct Email Item with Copy */}
+              <div className="flex items-center justify-between p-3.5 rounded-xl bg-theme-canvas/60 border border-theme hover:border-theme-primary transition-all group">
+                <div className="flex items-center gap-3.5">
+                  <div className="p-2.5 rounded-xl bg-theme-primary/10 text-theme-primary border border-theme">
+                    <Mail size={18} />
+                  </div>
+                  <div>
+                    <Typography variant="caption" className="text-zinc-500 block">Direct Inbox</Typography>
+                    <Typography variant="body" className="text-sm font-bold text-theme-base group-hover:text-theme-primary transition-colors">{directEmail}</Typography>
+                  </div>
+                </div>
+
+                <Button
+                  variant="secondary"
+                  size="icon"
+                  onClick={handleCopyEmail}
+                  className="h-8 w-8 text-theme-muted hover:text-theme-base"
+                  title="Copy email address"
+                >
+                  {emailCopied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
+                </Button>
+              </div>
+
+              {/* Location Item */}
+              <div className="flex items-center gap-3.5 p-3.5 rounded-xl bg-theme-canvas/60 border border-theme">
+                <div className="p-2.5 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20">
+                  <MapPin size={18} />
+                </div>
+                <div>
+                  <Typography variant="caption" className="text-zinc-500 block">Location & Zone</Typography>
+                  <Typography variant="body" className="text-sm font-bold text-theme-base">
+                    {profile?.location || 'Mumbai, India'} <span className="text-xs font-normal text-theme-muted">(IST / UTC+5:30)</span>
+                  </Typography>
+                </div>
+              </div>
+            </div>
+
+            {/* Interactive Developer Social Terminal */}
+            <SocialTerminal />
           </div>
         </div>
       </div>

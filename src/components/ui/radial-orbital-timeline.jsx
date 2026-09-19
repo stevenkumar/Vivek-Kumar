@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { ArrowRight, Link, Zap } from 'lucide-react'
+import { ArrowRight, Link, Zap, X } from 'lucide-react'
 import { Badge } from './badge'
 import { Button } from './Button'
 import { Card, CardContent, CardHeader, CardTitle } from './card'
@@ -233,7 +233,7 @@ export default function RadialOrbitalTimeline({ timelineData = [] }) {
                   {item.title}
                 </div>
 
-                {isExpanded && (
+                {!isMobile && isExpanded && (
                   <Card className="absolute top-20 left-1/2 -translate-x-1/2 w-[220px] md:w-64 bg-black/90 backdrop-blur-lg border-white/30 shadow-xl shadow-white/10 overflow-visible z-[300]">
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-px h-3 bg-white/50" />
                     <CardHeader className="pb-2">
@@ -303,6 +303,62 @@ export default function RadialOrbitalTimeline({ timelineData = [] }) {
           })}
         </div>
       </div>
+
+      {/* Mobile-Friendly Docked Card */}
+      {isMobile && activeNodeId && (() => {
+        const activeItem = timelineData.find((i) => i.id === activeNodeId)
+        if (!activeItem) return null
+        return (
+          <div className="absolute bottom-3 left-3 right-3 z-[350] bg-theme-card/95 backdrop-blur-xl border border-theme p-4 rounded-2xl shadow-2xl animate-in fade-in slide-in-from-bottom-2 duration-300">
+            <div className="flex justify-between items-center mb-2">
+              <Badge className={`px-2 text-[10px] ${getStatusStyles(activeItem.status)}`}>
+                {activeItem.status === 'completed'
+                  ? 'COMPLETE'
+                  : activeItem.status === 'in-progress'
+                  ? 'IN PROGRESS'
+                  : 'PENDING'}
+              </Badge>
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] font-mono text-zinc-500">{activeItem.date}</span>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    toggleItem(activeItem.id)
+                  }}
+                  className="p-1 rounded-lg text-zinc-400 hover:text-white cursor-pointer"
+                  aria-label="Close details"
+                >
+                  <X size={14} />
+                </button>
+              </div>
+            </div>
+            <div className="text-sm font-bold text-white mb-1">{activeItem.title}</div>
+            <p className="text-xs text-theme-muted line-clamp-3 leading-relaxed mb-2">{activeItem.content}</p>
+            {activeItem.relatedIds && activeItem.relatedIds.length > 0 && (
+              <div className="flex items-center gap-1.5 pt-2 border-t border-theme flex-wrap">
+                <span className="text-[10px] text-zinc-500 font-mono">Related:</span>
+                {activeItem.relatedIds.map((relId) => {
+                  const relItem = timelineData.find((i) => i.id === relId)
+                  return (
+                    <button
+                      key={relId}
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        toggleItem(relId)
+                      }}
+                      className="text-[10px] px-2 py-0.5 rounded-md bg-theme-canvas border border-theme text-theme-base hover:border-theme-primary transition-colors cursor-pointer"
+                    >
+                      {relItem?.title || `Node ${relId}`}
+                    </button>
+                  )
+                })}
+              </div>
+            )}
+          </div>
+        )
+      })()}
     </div>
   )
 }

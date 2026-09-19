@@ -81,7 +81,7 @@ const Hero = ({ onNavigateToContact }) => {
           variant="primary"
           size="lg"
           onClick={onNavigateToContact}
-          className="w-full sm:w-64 py-4 rounded-xl  hover:scale-[1.02] transition-transform"
+          className="w-full sm:w-64 py-4 rounded-xl hover:scale-[1.02] transition-transform shadow-lg cursor-pointer"
         >
           Contact Me
         </Button>
@@ -90,12 +90,19 @@ const Hero = ({ onNavigateToContact }) => {
         </div>
       </div>
 
-      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 z-10 w-full max-w-[420px] sm:max-w-[500px] pointer-events-none px-4">
-        <img
-          src={heroImageUrl}
-          alt={profile?.name || 'Vivek Kumar'}
-          className="w-full h-auto object-cover mask-image-gradient"
-        />
+      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 z-0 w-full max-w-[340px] sm:max-w-[440px] md:max-w-[500px] pointer-events-none px-4 opacity-25 sm:opacity-85 md:opacity-100 transition-opacity duration-500">
+        <div className="relative">
+          <img
+            src={heroImageUrl}
+            alt={profile?.name || 'Vivek Kumar'}
+            className="w-full h-auto object-cover"
+            style={{
+              maskImage: 'linear-gradient(to top, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 20%, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%)',
+              WebkitMaskImage: 'linear-gradient(to top, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 20%, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%)',
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-theme-canvas via-transparent to-theme-canvas/60 md:hidden" />
+        </div>
       </div>
     </section>
   )

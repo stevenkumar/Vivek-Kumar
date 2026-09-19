@@ -10,6 +10,11 @@ export default function PencilCursor() {
   const history = useRef([]);
 
   useEffect(() => {
+    // Only run on devices with a fine pointer (mouse), disable on mobile/touch
+    if (typeof window !== 'undefined' && (window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 768)) {
+      return;
+    }
+
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -72,9 +77,9 @@ export default function PencilCursor() {
   }, []);
 
   return (
-    <>
+    <div className="hidden md:block">
       <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-[9998]" />
       <div ref={cursorRef} className="fixed top-0 left-0 z-[9999] h-3 w-3 -ml-1.5 -mt-1.5 rounded-full bg-orange-400 shadow-sm pointer-events-none" />
-    </>
+    </div>
   );
 }

@@ -56,7 +56,7 @@ const Footer = ({ onNavigate }) => {
             </div>
           </div>
 
-          <div className="flex justify-self-center items-center bg-theme-canvas border border-theme p-1.5 rounded-full">
+          <div className="flex justify-self-center items-center bg-theme-canvas border border-theme p-1 sm:p-1.5 rounded-full max-w-full overflow-x-auto">
             {[
               { icon: <Github size={18} />, href: socials?.github || 'https://github.com/stevenkumar' },
               { icon: <Twitter size={18} />, href: socials?.twitter || 'https://x.com/Vivek9653' },
@@ -68,17 +68,17 @@ const Footer = ({ onNavigate }) => {
                 target="_blank"
                 rel="noreferrer"
                 whileHover={{ y: -3, scale: 1.1 }}
-                className="p-3 rounded-full text-theme-muted hover:text-theme-primary transition-all cursor-pointer"
+                className="p-2.5 sm:p-3 rounded-full text-theme-muted hover:text-theme-primary transition-all cursor-pointer shrink-0"
               >
                 {social.icon}
               </motion.a>
             ))}
-            <div className="w-px h-4 bg-theme-muted/30 mx-2" />
+            <div className="w-px h-4 bg-theme-muted/30 mx-1.5 sm:mx-2 shrink-0" />
             <Button
               variant="ghost"
               size="sm"
               onClick={handleCopy}
-              className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium hover:bg-transparent text-theme-muted hover:text-theme-base h-auto"
+              className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium hover:bg-transparent text-theme-muted hover:text-theme-base h-auto shrink-0"
             >
               <AnimatePresence mode="wait">
                 {copied ? (
@@ -95,7 +95,7 @@ const Footer = ({ onNavigate }) => {
             </Button>
           </div>
 
-          <div className="justify-self-center md:justify-self-end pr-2">
+          <div className="justify-self-center md:justify-self-end pr-0 md:pr-2">
             <Button
               variant="primary"
               size="md"
@@ -110,7 +110,7 @@ const Footer = ({ onNavigate }) => {
           </div>
         </motion.div>
 
-        <div className="mt-8 flex flex-col md:flex-row justify-between items-center px-8 gap-4">
+        <div className="mt-8 flex flex-col md:flex-row justify-between items-center px-4 sm:px-8 gap-4">
           <div className="flex items-center gap-6 text-[11px] font-bold text-theme-muted uppercase tracking-[0.15em]">
             <Typography variant="caption">© {new Date().getFullYear()}</Typography>
             <Typography variant="caption">Made By {profile?.name || 'Vivek Kumar'}</Typography>

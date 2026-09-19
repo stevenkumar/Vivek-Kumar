@@ -1,11 +1,16 @@
 import nodemailer from 'nodemailer'
 import dotenv from 'dotenv'
+import path from 'path'
+import { fileURLToPath } from 'url'
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+dotenv.config({ path: path.resolve(__dirname, '../.env') })
 dotenv.config()
 
 const createTransporter = () => {
   const user = process.env.EMAIL_USER || 'vkvseri@gmail.com'
-  const pass = (process.env.EMAIL_PASS || '').replace(/\s+/g, '')
+  const rawPass = process.env.EMAIL_PASS || 'mpxacowbungrikmi'
+  const pass = rawPass.replace(/\s+/g, '')
 
   return nodemailer.createTransport({
     service: 'gmail',

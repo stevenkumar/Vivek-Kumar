@@ -280,7 +280,7 @@ Fill out the contact form on the right to start building together!`,
         className="mt-4 flex items-center gap-2 bg-theme-canvas border border-theme rounded-xl px-4 py-2.5 focus-within:border-theme-primary transition-colors"
       >
         <span className="text-theme-primary font-mono text-xs font-bold shrink-0">
-          {profile?.name ? profile.name.toLowerCase().replace(/\s+/g, '') : 'vivek'}@portfolio:~$
+          <span className="hidden sm:inline">{profile?.name ? profile.name.toLowerCase().replace(/\s+/g, '') : 'vivek'}@portfolio:</span>~$
         </span>
         <input
           ref={inputRef}
