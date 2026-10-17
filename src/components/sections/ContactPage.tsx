@@ -99,13 +99,15 @@ const ContactPage: React.FC<ContactPageProps> = ({ onNavigateHome }) => {
         },
         body: JSON.stringify({
           access_key: import.meta.env.VITE_WEB3FORMS_ACCESS_KEY,
-          subject: '📬 Portfolio Inquiry from ' + formData.name.trim(),
-          from_name: 'Vivek Kumar Portfolio',
+          botcheck: "", // <-- Ye bots se tumhara 250/month quota bachata hai!
+          subject: `📬 Portfolio Inquiry from ${formData.name.trim()}`,
+          from_name: "Vivek Kumar Portfolio",
           name: formData.name.trim(),
           email: formData.email.trim(),
-          phone: formData.number ? formData.number.trim() : 'Not provided',
+          phone: formData.number ? formData.number.trim() : "Not provided",
           message: formData.message.trim(),
         }),
+
       })
 
       const data = await response.json()
@@ -259,9 +261,8 @@ const ContactPage: React.FC<ContactPageProps> = ({ onNavigateHome }) => {
                       value={formData.message}
                       onChange={handleChange}
                       placeholder="Tell me about your project, ideas, or timeline..."
-                      className={`w-full bg-theme-canvas/80 border ${
-                        errors.message ? 'border-red-500 focus:ring-red-500' : 'border-theme focus:border-theme-primary'
-                      } rounded-xl px-4 py-3 text-sm text-theme-base placeholder:text-zinc-600 focus:outline-none focus:ring-1 focus:ring-cyan-500/30 transition-all resize-none`}
+                      className={`w-full bg-theme-canvas/80 border ${errors.message ? 'border-red-500 focus:ring-red-500' : 'border-theme focus:border-theme-primary'
+                        } rounded-xl px-4 py-3 text-sm text-theme-base placeholder:text-zinc-600 focus:outline-none focus:ring-1 focus:ring-cyan-500/30 transition-all resize-none`}
                     />
                     {errors.message && <p className="text-red-400 text-xs mt-1">{errors.message}</p>}
                   </div>
