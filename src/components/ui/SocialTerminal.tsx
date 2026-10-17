@@ -293,7 +293,7 @@ Fill out the contact form on the right to start building together!`,
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="type 'github', 'help', 'resume'..."
-          className="w-full bg-transparent text-theme-base font-mono text-xs focus:outline-none placeholder:text-zinc-600"
+          className="w-full bg-transparent text-theme-base font-mono text-base sm:text-xs focus:outline-none placeholder:text-zinc-600"
           autoComplete="off"
           spellCheck="false"
         />

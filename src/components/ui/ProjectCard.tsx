@@ -32,7 +32,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index = 0 }) => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-50px' }}
       transition={{ duration: 0.6, delay: (index % 3) * 0.1, ease: [0.22, 1, 0.36, 1] }}
-      className="bg-theme-card rounded-[22px] p-6 sm:p-8 md:p-12 overflow-hidden relative border border-theme hover:border-theme-primary transition-all duration-500 shadow-2xl group"
+      className="bg-theme-card rounded-[22px] p-5 sm:p-8 md:p-12 overflow-hidden relative border border-theme hover:border-theme-primary transition-all duration-500 shadow-2xl group"
     >
       {/* Background Watermark */}
       <div className="absolute -right-6 -bottom-10 opacity-[0.03] rotate-12 pointer-events-none select-none text-white">
@@ -140,6 +140,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index = 0 }) => {
               src={image}
               alt={title}
               loading="lazy"
+              decoding="async"
               className="w-full h-full object-cover object-top relative z-10 transition-transform duration-500 group-hover:scale-105"
               onError={() => setImageError(true)}
             />

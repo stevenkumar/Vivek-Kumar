@@ -62,7 +62,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             aria-invalid={Boolean(error)}
             aria-describedby={error ? `${inputId}-error` : helperText ? `${inputId}-helper` : undefined}
             className={cn(
-              'w-full bg-theme-canvas border rounded-xl px-4 py-3 text-sm text-theme-base placeholder:text-zinc-600 focus:outline-none transition-all disabled:opacity-50 disabled:cursor-not-allowed',
+              'w-full bg-theme-canvas border rounded-xl px-4 py-3 text-base sm:text-sm text-theme-base placeholder:text-zinc-600 focus:outline-none transition-all disabled:opacity-50 disabled:cursor-not-allowed',
               Icon && 'pl-10',
               error
                 ? 'border-red-500/80 focus:border-red-500 focus:ring-1 focus:ring-red-500/30'

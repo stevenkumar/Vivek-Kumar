@@ -102,7 +102,7 @@ export const MasterPortfolioTimeline: React.FC = () => {
             Interactive orbital map of my professional career, core skills, and specialized engineering projects. Click any node to explore.
           </Typography>
         </div>
-        <div className="h-[500px] md:h-[800px] w-full rounded-2xl md:rounded-3xl border border-theme overflow-hidden relative shadow-2xl bg-theme-card">
+        <div className="h-[480px] sm:h-[540px] md:h-[750px] lg:h-[800px] w-full rounded-2xl md:rounded-3xl border border-theme overflow-hidden relative shadow-2xl bg-theme-card">
           <RadialOrbitalTimeline timelineData={portfolioData} />
         </div>
       </div>

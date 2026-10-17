@@ -14,6 +14,8 @@ import {
   Sparkles,
   Rocket,
   Layers,
+  GraduationCap,
+  Award,
   type LucideIcon,
 } from 'lucide-react'
 import { useSettings } from '../../context/SettingsContext'
@@ -221,6 +223,8 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onNavigateHome }) =>
               <img
                 src={profileImageUrl}
                 alt={profile?.name || 'Vivek Kumar'}
+                loading="lazy"
+                decoding="async"
                 className="relative w-28 h-28 rounded-full border-4 border-theme-canvas object-cover"
               />
               {profile?.openToWork && (
@@ -318,6 +322,107 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onNavigateHome }) =>
             </div>
           </motion.div>
         </div>
+
+        {/* Education & Technical Certifications Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+          viewport={{ once: true }}
+          className="bg-theme-card border border-theme rounded-[22px] p-6 sm:p-8 md:p-10 shadow-2xl mb-6"
+        >
+          <div className="flex items-center gap-3 mb-6 sm:mb-8">
+            <div className="h-8 w-1 gradient-primary rounded-full" />
+            <div>
+              <Typography variant="h3" className="text-xl sm:text-2xl font-bold">
+                Education &amp; Technical Certifications
+              </Typography>
+              <Typography
+                variant="caption"
+                className="text-xs text-theme-primary lowercase tracking-normal font-mono block"
+              >
+                academic pedigree &amp; industry-verified software engineering credentials
+              </Typography>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {/* Master of Computer Applications (MCA) */}
+            <div className="p-5 sm:p-6 rounded-2xl bg-theme-canvas/60 border border-theme hover:border-theme-primary/50 transition-all group flex flex-col justify-between">
+              <div>
+                <div className="flex items-start justify-between gap-3 mb-4">
+                  <div className="p-3 rounded-xl bg-theme-primary/10 text-theme-primary border border-theme-primary/20 group-hover:scale-105 transition-transform">
+                    <GraduationCap size={22} />
+                  </div>
+                  <span className="text-[11px] font-mono uppercase tracking-wider px-2.5 py-1 rounded-full bg-theme-card border border-theme text-theme-muted">
+                    Postgraduate Degree
+                  </span>
+                </div>
+
+                <h4 className="text-lg sm:text-xl font-bold text-theme-base mb-1 group-hover:text-theme-primary transition-colors">
+                  Master of Computer Applications (MCA)
+                </h4>
+                <p className="text-xs sm:text-sm font-semibold text-theme-primary font-mono mb-3">
+                  Computer Science &amp; Software Engineering
+                </p>
+
+                <p className="text-xs sm:text-sm text-theme-muted leading-relaxed mb-4">
+                  Advanced academic coursework centered on Data Structures &amp; Algorithms, Object-Oriented Software Design, Distributed Databases, and Enterprise Web Architectures.
+                </p>
+              </div>
+
+              <div className="pt-3 border-t border-theme/60 flex flex-wrap gap-1.5">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-theme-card border border-theme text-zinc-400">
+                  Data Structures &amp; Algorithms
+                </span>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-theme-card border border-theme text-zinc-400">
+                  Software Engineering
+                </span>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-theme-card border border-theme text-zinc-400">
+                  Database Systems
+                </span>
+              </div>
+            </div>
+
+            {/* Advanced Java Programming & Full-Stack Training */}
+            <div className="p-5 sm:p-6 rounded-2xl bg-theme-canvas/60 border border-theme hover:border-theme-primary/50 transition-all group flex flex-col justify-between">
+              <div>
+                <div className="flex items-start justify-between gap-3 mb-4">
+                  <div className="p-3 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20 group-hover:scale-105 transition-transform">
+                    <Award size={22} />
+                  </div>
+                  <span className="text-[11px] font-mono uppercase tracking-wider px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center gap-1">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                    Certified
+                  </span>
+                </div>
+
+                <h4 className="text-lg sm:text-xl font-bold text-theme-base mb-1 group-hover:text-theme-primary transition-colors">
+                  Advanced Java &amp; Full-Stack Engineering
+                </h4>
+                <p className="text-xs sm:text-sm font-semibold text-purple-400 font-mono mb-3">
+                  Certified via Anudip Foundation
+                </p>
+
+                <p className="text-xs sm:text-sm text-theme-muted leading-relaxed mb-4">
+                  Industry-grade full-stack software development program covering Core &amp; Advanced Java, RESTful Microservices, SQL modeling, and full-stack deployment workflows.
+                </p>
+              </div>
+
+              <div className="pt-3 border-t border-theme/60 flex flex-wrap gap-1.5">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-theme-card border border-theme text-zinc-400">
+                  Full-Stack Architecture
+                </span>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-theme-card border border-theme text-zinc-400">
+                  Advanced Java
+                </span>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-theme-card border border-theme text-zinc-400">
+                  REST APIs
+                </span>
+              </div>
+            </div>
+          </div>
+        </motion.div>
 
         {/* Story Section */}
         <motion.div

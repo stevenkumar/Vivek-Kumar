@@ -19,7 +19,7 @@ const DownloadCV: React.FC = () => {
       animate={{ opacity: 1, scale: 1 }}
       whileHover={{ scale: 1.03 }}
       whileTap={{ scale: 0.97 }}
-      className="inline-flex items-center justify-center gap-3 px-8 py-4 border border-theme bg-theme-card hover:bg-theme-canvas text-theme-base font-bold rounded-2xl transition-all shadow-xl group relative overflow-hidden cursor-pointer"
+      className="w-full sm:w-auto min-h-[48px] inline-flex items-center justify-center gap-3 px-8 py-3.5 sm:py-4 border border-theme bg-theme-card hover:bg-theme-canvas text-theme-base font-bold rounded-2xl transition-all shadow-xl group relative overflow-hidden cursor-pointer"
     >
       <motion.span animate={{ y: [0, 2, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>
         <FileDown size={20} className="text-theme-primary group-hover:translate-y-0.5 transition-transform" />

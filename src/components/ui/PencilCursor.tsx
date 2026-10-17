@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
 interface Point {
   x: number
@@ -6,6 +6,16 @@ interface Point {
 }
 
 export const PencilCursor: React.FC = () => {
+  const [isTouchDevice, setIsTouchDevice] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return true
+    return (
+      window.matchMedia('(pointer: coarse)').matches ||
+      'ontouchstart' in window ||
+      navigator.maxTouchPoints > 0 ||
+      window.innerWidth < 768
+    )
+  })
+
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const cursorRef = useRef<HTMLDivElement | null>(null)
   const mouse = useRef<Point>({ x: 0, y: 0 })
@@ -13,9 +23,37 @@ export const PencilCursor: React.FC = () => {
   const history = useRef<Point[]>([])
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && (window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 768)) {
-      return
+    if (typeof window === 'undefined') return
+
+    const coarseQuery = window.matchMedia('(pointer: coarse)')
+    const updateTouchStatus = () => {
+      const isCoarse = coarseQuery.matches
+      const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0
+      const isSmallScreen = window.innerWidth < 768
+      setIsTouchDevice(isCoarse || hasTouch || isSmallScreen)
     }
+
+    updateTouchStatus()
+
+    if (coarseQuery.addEventListener) {
+      coarseQuery.addEventListener('change', updateTouchStatus)
+    } else {
+      coarseQuery.addListener(updateTouchStatus)
+    }
+    window.addEventListener('resize', updateTouchStatus)
+
+    return () => {
+      if (coarseQuery.removeEventListener) {
+        coarseQuery.removeEventListener('change', updateTouchStatus)
+      } else {
+        coarseQuery.removeListener(updateTouchStatus)
+      }
+      window.removeEventListener('resize', updateTouchStatus)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (isTouchDevice) return
 
     const canvas = canvasRef.current
     if (!canvas) return
@@ -78,12 +116,19 @@ export const PencilCursor: React.FC = () => {
       window.removeEventListener('mousemove', handleMouseMove)
       cancelAnimationFrame(animationId)
     }
-  }, [])
+  }, [isTouchDevice])
+
+  if (isTouchDevice) {
+    return null
+  }
 
   return (
-    <div className="hidden md:block">
+    <div className="hidden md:block pointer-events-none">
       <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-[9998]" />
-      <div ref={cursorRef} className="fixed top-0 left-0 z-[9999] h-3 w-3 -ml-1.5 -mt-1.5 rounded-full bg-orange-400 shadow-sm pointer-events-none" />
+      <div
+        ref={cursorRef}
+        className="fixed top-0 left-0 z-[9999] h-3 w-3 -ml-1.5 -mt-1.5 rounded-full bg-orange-400 shadow-sm pointer-events-none"
+      />
     </div>
   )
 }

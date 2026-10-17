@@ -262,7 +262,7 @@ const ContactPage: React.FC<ContactPageProps> = ({ onNavigateHome }) => {
                       onChange={handleChange}
                       placeholder="Tell me about your project, ideas, or timeline..."
                       className={`w-full bg-theme-canvas/80 border ${errors.message ? 'border-red-500 focus:ring-red-500' : 'border-theme focus:border-theme-primary'
-                        } rounded-xl px-4 py-3 text-sm text-theme-base placeholder:text-zinc-600 focus:outline-none focus:ring-1 focus:ring-cyan-500/30 transition-all resize-none`}
+                        } rounded-xl px-4 py-3 text-base sm:text-sm text-theme-base placeholder:text-zinc-600 focus:outline-none focus:ring-1 focus:ring-cyan-500/30 transition-all resize-none`}
                     />
                     {errors.message && <p className="text-red-400 text-xs mt-1">{errors.message}</p>}
                   </div>

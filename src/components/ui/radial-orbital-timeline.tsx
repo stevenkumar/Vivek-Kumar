@@ -19,16 +19,34 @@ export default function RadialOrbitalTimeline({ timelineData = [] }: RadialOrbit
   const containerRef = useRef<HTMLDivElement | null>(null)
   const orbitRef = useRef<HTMLDivElement | null>(null)
   const nodeRefs = useRef<Record<number, HTMLDivElement | null>>({})
-  const [isMobile, setIsMobile] = useState(false)
+  const [viewportWidth, setViewportWidth] = useState<number>(() =>
+    typeof window !== 'undefined' ? window.innerWidth : 1024
+  )
 
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768)
+    const handleResize = () => {
+      setViewportWidth(window.innerWidth)
     }
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
   }, [])
+
+  const isMobile = viewportWidth < 768
+
+  // Dynamically scale orbital radius across 320px - 2560px viewports:
+  // <380px (narrow mobile like iPhone SE 375px/320px): 92px radius (fits cleanly within 288px container)
+  // 380px - 500px (standard mobile 390px - 430px): 112px radius
+  // 500px - 768px (phablets & mini tablets): 140px radius
+  // >=768px (tablets & desktop): 200px radius
+  const getOrbitRadius = () => {
+    if (viewportWidth < 380) return 92
+    if (viewportWidth < 500) return 112
+    if (viewportWidth < 768) return 140
+    return 200
+  }
+
+  const orbitRadius = getOrbitRadius()
 
   const handleContainerClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === containerRef.current || e.target === orbitRef.current) {
@@ -102,11 +120,10 @@ export default function RadialOrbitalTimeline({ timelineData = [] }: RadialOrbit
 
   const calculateNodePosition = (index: number, total: number) => {
     const angle = ((index / total) * 360 + rotationAngle) % 360
-    const radius = isMobile ? 130 : 200
     const radian = (angle * Math.PI) / 180
 
-    const x = radius * Math.cos(radian) + centerOffset.x
-    const y = radius * Math.sin(radian) + centerOffset.y
+    const x = orbitRadius * Math.cos(radian) + centerOffset.x
+    const y = orbitRadius * Math.sin(radian) + centerOffset.y
 
     const zIndex = Math.round(100 + 50 * Math.cos(radian))
     const opacity = Math.max(0.4, Math.min(1, 0.4 + 0.6 * ((1 + Math.sin(radian)) / 2)))
@@ -148,20 +165,20 @@ export default function RadialOrbitalTimeline({ timelineData = [] }: RadialOrbit
             transform: `translate(${centerOffset.x}px, ${centerOffset.y}px)`,
           }}
         >
-          <div className="absolute w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 via-blue-500 to-teal-500 animate-pulse flex items-center justify-center z-10">
-            <div className="absolute w-20 h-20 rounded-full border border-white/20 animate-ping opacity-70" />
+          <div className="absolute w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-purple-500 via-blue-500 to-teal-500 animate-pulse flex items-center justify-center z-10 pointer-events-none">
+            <div className="absolute w-16 h-16 sm:w-20 sm:h-20 rounded-full border border-white/20 animate-ping opacity-70" />
             <div
-              className="absolute w-24 h-24 rounded-full border border-white/10 animate-ping opacity-50"
+              className="absolute w-20 h-20 sm:w-24 sm:h-24 rounded-full border border-white/10 animate-ping opacity-50"
               style={{ animationDelay: '0.5s' }}
             />
-            <div className="w-8 h-8 rounded-full bg-white/80 backdrop-blur-md" />
+            <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white/80 backdrop-blur-md" />
           </div>
 
           <div
-            className="absolute rounded-full border border-white/10"
+            className="absolute rounded-full border border-white/10 pointer-events-none"
             style={{
-              width: isMobile ? '260px' : '384px',
-              height: isMobile ? '260px' : '384px',
+              width: `${orbitRadius * 2}px`,
+              height: `${orbitRadius * 2}px`,
             }}
           />
 
@@ -171,6 +188,7 @@ export default function RadialOrbitalTimeline({ timelineData = [] }: RadialOrbit
             const isRelated = isRelatedToActive(item.id)
             const isPulsing = Boolean(pulseEffect[item.id])
             const Icon = item.icon
+            const glowSize = Math.min(item.energy * 0.4 + 32, isMobile ? 56 : 80)
 
             const nodeStyle = {
               transform: `translate(${position.x}px, ${position.y}px)`,
@@ -195,16 +213,16 @@ export default function RadialOrbitalTimeline({ timelineData = [] }: RadialOrbit
                   className={`absolute rounded-full -inset-1 ${isPulsing ? 'animate-pulse duration-1000' : ''}`}
                   style={{
                     background: `radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%)`,
-                    width: `${item.energy * 0.5 + 40}px`,
-                    height: `${item.energy * 0.5 + 40}px`,
-                    left: `-${(item.energy * 0.5 + 40 - 40) / 2}px`,
-                    top: `-${(item.energy * 0.5 + 40 - 40) / 2}px`,
+                    width: `${glowSize}px`,
+                    height: `${glowSize}px`,
+                    left: `-${(glowSize - 40) / 2}px`,
+                    top: `-${(glowSize - 40) / 2}px`,
                   }}
                 />
 
                 <div
                   className={`
-                  w-10 h-10 rounded-full flex items-center justify-center
+                  w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center
                   ${
                     isExpanded
                       ? 'bg-white text-black'
@@ -224,12 +242,12 @@ export default function RadialOrbitalTimeline({ timelineData = [] }: RadialOrbit
                   ${isExpanded ? 'scale-125 md:scale-150' : 'scale-90 md:scale-100'}
                 `}
                 >
-                  <Icon size={isMobile ? 14 : 16} />
+                  <Icon size={viewportWidth < 380 ? 13 : isMobile ? 14 : 16} />
                 </div>
 
                 <div
                   className={`
-                  absolute top-12 whitespace-nowrap
+                  absolute top-11 sm:top-12 whitespace-nowrap
                   text-[10px] md:text-xs font-semibold tracking-wider
                   transition-all duration-300
                   ${isExpanded ? 'text-white scale-110 md:scale-125' : 'text-white/70'}
@@ -315,7 +333,7 @@ export default function RadialOrbitalTimeline({ timelineData = [] }: RadialOrbit
         const activeItem = timelineData.find((i) => i.id === activeNodeId)
         if (!activeItem) return null
         return (
-          <div className="absolute bottom-3 left-3 right-3 z-[350] bg-theme-card/95 backdrop-blur-xl border border-theme p-4 rounded-2xl shadow-2xl animate-in fade-in slide-in-from-bottom-2 duration-300">
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 w-[92vw] max-w-[90vw] z-[350] bg-theme-card/95 backdrop-blur-xl border border-theme p-3.5 sm:p-4 rounded-2xl shadow-2xl animate-in fade-in slide-in-from-bottom-2 duration-300">
             <div className="flex justify-between items-center mb-2">
               <Badge className={`px-2 text-[10px] ${getStatusStyles(activeItem.status)}`}>
                 {activeItem.status === 'completed'
@@ -325,22 +343,22 @@ export default function RadialOrbitalTimeline({ timelineData = [] }: RadialOrbit
                   : 'PENDING'}
               </Badge>
               <div className="flex items-center gap-2">
-                <span className="text-[11px] font-mono text-zinc-500">{activeItem.date}</span>
+                <span className="text-[10px] sm:text-[11px] font-mono text-zinc-500">{activeItem.date}</span>
                 <button
                   type="button"
                   onClick={(e) => {
                     e.stopPropagation()
                     toggleItem(activeItem.id)
                   }}
-                  className="p-1 rounded-lg text-zinc-400 hover:text-white cursor-pointer"
+                  className="p-1 rounded-lg text-zinc-400 hover:text-white cursor-pointer min-h-[32px] min-w-[32px] flex items-center justify-center"
                   aria-label="Close details"
                 >
-                  <X size={14} />
+                  <X size={15} />
                 </button>
               </div>
             </div>
-            <div className="text-sm font-bold text-white mb-1">{activeItem.title}</div>
-            <p className="text-xs text-theme-muted line-clamp-3 leading-relaxed mb-2">{activeItem.content}</p>
+            <div className="text-xs sm:text-sm font-bold text-white mb-1">{activeItem.title}</div>
+            <p className="text-[11px] sm:text-xs text-theme-muted line-clamp-3 leading-relaxed mb-2">{activeItem.content}</p>
             {activeItem.relatedIds && activeItem.relatedIds.length > 0 && (
               <div className="flex items-center gap-1.5 pt-2 border-t border-theme flex-wrap">
                 <span className="text-[10px] text-zinc-500 font-mono">Related:</span>

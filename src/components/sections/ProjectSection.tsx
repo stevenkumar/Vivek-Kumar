@@ -78,14 +78,14 @@ export const ProjectSection: React.FC<ProjectSectionProps> = ({ onNavigateHome }
 
         {/* Category Filter Tabs */}
         {categories.length > 1 && (
-          <div className="flex justify-center mb-12">
-            <div className="inline-flex flex-wrap items-center justify-center gap-2 p-1.5 rounded-2xl bg-theme-card border border-theme backdrop-blur-md">
+          <div className="flex justify-center mb-10 sm:mb-12 max-w-full overflow-x-auto no-scrollbar px-1 py-1">
+            <div className="inline-flex flex-wrap sm:flex-nowrap items-center justify-center gap-1.5 sm:gap-2 p-1.5 rounded-2xl bg-theme-card border border-theme backdrop-blur-md max-w-full">
               {categories.map((cat) => (
                 <button
                   key={cat}
                   type="button"
                   onClick={() => setActiveCategory(cat)}
-                  className={`relative px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer bg-transparent border-0 ${
+                  className={`relative px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer bg-transparent border-0 shrink-0 ${
                     activeCategory === cat ? 'text-white' : 'text-theme-muted hover:text-theme-base hover:bg-theme-canvas/50'
                   }`}
                 >
@@ -96,7 +96,7 @@ export const ProjectSection: React.FC<ProjectSectionProps> = ({ onNavigateHome }
                       transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                     />
                   )}
-                  <span className="relative z-10">{cat}</span>
+                  <span className="relative z-10 whitespace-nowrap">{cat}</span>
                 </button>
               ))}
             </div>

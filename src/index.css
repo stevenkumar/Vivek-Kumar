@@ -211,9 +211,11 @@
   box-shadow: 0 0 25px rgba(var(--color-primary-rgb), 0.25) !important;
 }
 
+html,
 body {
   margin: 0;
   min-width: 320px;
+  max-width: 100vw;
   min-height: 100vh;
   background-color: var(--color-bg);
   color: var(--color-text);
@@ -223,4 +225,13 @@ body {
 .text-outline {
   -webkit-text-stroke: 1px rgba(255, 255, 255, 0.4);
   color: transparent;
+}
+
+/* Hide scrollbars while retaining scroll functionality */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
